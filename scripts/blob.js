@@ -9,7 +9,8 @@ let mouseMotion = [];
 let lastFrame = Date.now();
 let endBlobs = false;
 
-if (hasHWA) {
+// disabling fancy blobs for now
+if (false) {
     setupBlobCages();
     updateCanvases();
 

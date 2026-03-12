@@ -78,6 +78,12 @@ function fillTransition(imageBg, url, event) {
     }, 700);
     setTimeout(() => {
         if (url) {
+            // clear transition for if user returns afterward
+            content.style.height = null;
+            content.style.transition = "opacity 1.5s .2s cubic-bezier(0.075, 0.82, 0.165, 1)";
+            content.style.opacity = 1;
+            emptyTransition(false);
+            // serve link
             window.location.href = url;
         }
     }, 900);

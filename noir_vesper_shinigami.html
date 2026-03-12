@@ -1,0 +1,438 @@
+<!--
+     ,------,
+    /_  () \
+   /_,-`     .
+     /   .     `.
+     \     ` - _  `>
+      '.  .   ._ , - `
+        \ | \ ['
+      ,-,'/ ,-,\
+        squonk
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proller - Noir Vesper Shinigami</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Proller" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
+    <style>
+        #project_hero {
+            position: relative;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .project_img {
+            position: absolute;
+            border-radius: 20px;
+            overflow: hidden;
+            filter: drop-shadow(0px 4px 4px #20252d55);
+        }
+        #project_summary {
+            position: relative;
+            width: 100%;
+            padding-bottom: 80px;
+        }
+        #project_title {
+            height: 80px;
+            width: 390px;
+            text-transform: uppercase;
+            line-height: 32px;
+            font-size: 36px;
+            font-weight: 900;
+        }
+        #project_info {
+            display: flex;
+        }
+        #project_details {
+            display: flex;
+            flex-direction: column;
+            margin-top: 22px;
+        }
+        .detail {
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 40px;
+        }
+        .detail_label {
+            width: 195px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+        .detail_items {
+            display: flex;
+            flex-direction: column;
+            width: 195px;
+        }
+        .detail_items div {
+            height: 28px;
+        }
+        #project_body_text {
+            position: relative;
+            margin-top: 22px;
+        }
+        #blob1, #blob2 {
+            position: absolute;
+        }
+        @media (max-width: 989px) { /*mobile*/
+            #project_hero {
+                height: calc((100vw - 84px) / 318px * 400px);
+            }
+            .project_img {
+                top: 0px;
+                left: 0px;
+                height: calc((100vw - 84px) / 318px * 400px);
+                width: 100%;
+            }
+            .project_img img {
+                width: 240%;
+                transform: translate(-54%, -50%);
+            }
+            #blob1 {
+                top: calc((100vw - 84px) / 318px * 40px);
+                right: -42px;
+                height: calc((100vw - 84px) / 318px * 240px);
+                width: 50vw;
+            }
+            #blob2 {
+                bottom: calc((100vw - 84px) / 318px * 40px);
+                left: -42px;
+                height: calc((100vw - 84px) / 318px * 240px);
+                width: 50vw;
+            }
+            #project_title {
+                margin-left: 0px;
+            }
+            #project_info {
+                flex-direction: column;
+            }
+            #project_details {
+                margin-left: 0px;
+            }
+            #project_body_text {
+                margin-left: 0px;
+            }
+            #zoom {
+                display: none;
+            }
+        }
+        @media (min-width: 990px) { /*desktop narrow*/
+            #project_hero {
+                height: 400px;
+            }
+            .project_img {
+                top: 40px;
+                left: 65px;
+                height: 360px;
+                width: 780px;
+            }
+            .project_img img {
+                width: 100%;
+                transform: translate(-50%, -42%);
+            }
+            #blob1 {
+                top: 0px;
+                right: 0px;
+                height: 360px;
+                width: 260px;
+            }
+            #blob2 {
+                bottom: 40px;
+                left: 0px;
+                height: 200px;
+                width: 130px;
+            }
+            #project_title {
+                margin-left: 65px;
+            }
+            #project_info {
+                flex-direction: column;
+            }
+            #project_details {
+                margin-left: 65px;
+            }
+            #project_body_text {
+                margin-left: 260px
+            }
+            #zoom {
+                display: flex;
+            }
+        }
+        @media (min-width: 1380px) { /*full desktop*/
+            #project_hero {
+                height: 520px;
+            }
+            .project_img {
+                top: 40px;
+                left: 130px;
+                height: 480px;
+                width: 1040px;
+            }
+            .project_img img {
+                width: 100%;
+                transform: translate(-50%, -42%);
+            }
+            #blob1 {
+                top: 0px;
+                right: 0px;
+                height: 440px;
+                width: 445px;
+            }
+            #blob2 {
+                bottom: 40px;
+                left: 0px;
+                height: 320px;
+                width: 260px;
+            }
+            #project_title {
+                margin-left: 130px;
+            }
+            #project_info {
+                flex-direction: row;
+            }
+            #project_details {
+                margin-left: 130px;
+            }
+            #project_body_text {
+                margin-left: 130px
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="image_expand_bg"></div>
+    <div id="image_expand" class="stasis">
+        <div id="image_expand_blob1" class="blobs invert stasis">
+            <svg id="blob1_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="1920" height="720" fill="url(#paint0_radial_11606_2)"/>
+                <defs>
+                <radialGradient id="paint0_radial_11606_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960) rotate(90) scale(360 960)">
+                <stop stop-color="#20252D" stop-opacity="0"/>
+                <stop offset="1" stop-color="#20252D"/>
+                </radialGradient>
+                </defs>
+            </svg>
+        </div>
+        <div id="image_expand_blob2" class="blobs invert stasis">
+            <svg id="blob2_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="1920" height="720" fill="url(#paint0_radial_11613_2)"/>
+                <defs>
+                <radialGradient id="paint0_radial_11613_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 720) rotate(-90) scale(360 960)">
+                <stop stop-color="#20252D" stop-opacity="0"/>
+                <stop offset="1" stop-color="#20252D"/>
+                </radialGradient>
+                </defs>
+            </svg>
+        </div>
+        <div id="image_expand_bar" class="stasis">
+            <div id="zoom">
+                <div class="label">zoom</div>
+                <svg id="zoom_minus" width="16" height="2" viewBox="0 0 16 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="16" height="1.5" rx="0.75" fill="#20252D"/>
+                </svg>
+                <div id="zoom_track">
+                    <div id="zoom_thumb"></div>
+                </div>
+                <svg id="zoom_plus" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect y="7.25" width="16" height="1.5" rx="0.75" fill="#20252D"/>
+                    <rect x="8.75" width="16" height="1.5" rx="0.75" transform="rotate(90 8.75 0)" fill="#20252D"/>
+                </svg>
+            </div>
+            <div class="button_mount">
+                <div class="button circle" onclick="closeImage()">
+                    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0.699219 15.1992L6.19922 9.69922M6.19922 9.69922L6.19922 14.6992M6.19922 9.69922L1.19922 9.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M15.6992 0.699219L10.1992 6.19922M10.1992 6.19922V1.19922M10.1992 6.19922L15.1992 6.19922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="scrollbar">
+        <div id="scrollbar_track">
+            <div id="scrollbar_thumb"></div>
+        </div>
+    </div>
+    <div id="header">
+        <div id="header_title">
+            <div id="header_subtitle">
+                CODING + DESIGN
+                <br><span style="letter-spacing: 5.1px">+ ILLUSTRATION</span>
+            </div>
+            <a id="logo" href="index.html" onclick="fillTransition(false, 'index.html', event)">
+                <svg width="520" height="81" viewBox="0 0 520 81" preserveAspectRatio="xMinYMin slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M75.332 79.7487L75.332 46.7795C75.332 45.6172 76.0296 45.4659 77.0758 45.796C79.3428 46.5113 94.165 50.6239 94.165 70.6504V79.7487H75.332Z" fill="#20252D"/>
+                    <path d="M312.837 0.00015279V75.0101C312.837 76.1723 313.535 76.1934 314.581 75.8147C322.037 70.9344 330.973 63.3192 330.973 48.6359V0.00015279H312.837Z" fill="#20252D"/>
+                    <path d="M248.317 0.00015279V75.0101C248.317 76.1723 249.014 76.1934 250.06 75.8147C257.517 70.9344 266.452 63.3192 266.452 48.6359V0.00015279H248.317Z" fill="#20252D"/>
+                    <path d="M377.206 0.000180074L377.206 70.2033C377.206 71.3656 377.903 71.5444 378.949 71.008C386.251 67.2645 394.992 58.1338 394.992 38.1072C394.992 38.1072 401.214 39.0359 411.013 48.8358C411.536 49.359 411.856 49.3722 412.408 48.8358C417.494 43.8878 422.544 38.265 425.334 33.2584C425.737 32.5432 425.16 32.1855 424.637 32.1855H394.644V3.21871C407.199 3.21871 419.405 5.18559 431.089 20.9207C431.612 21.6359 432.135 21.4571 432.484 20.9207C438.042 7.50998 439.611 0.000180074 434.554 0.000180074H377.206Z" fill="#20252D"/>
+                    <path d="M382.414 76.1725C395.144 75.6361 413.257 71.5232 434.903 62.0464C436.123 61.512 436.647 62.0462 436.821 62.7617C441.071 80.1979 438.566 79.7487 435.275 79.7487H380.845C374.894 79.7487 379.276 76.3048 382.414 76.1725Z" fill="#20252D"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M75.332 0.000174617V24.3181C75.332 31.828 82.9466 40.9472 101.838 47.2055C118.753 52.809 129.39 58.4702 129.39 79.7485H147.525C147.525 55.7881 134.098 51.1603 122.066 48.4782C136.016 47.2055 142.642 34.3312 142.642 27.1789C142.642 10.7284 129.738 0.000174617 118.404 0.000174617H75.332ZM111.254 3.93396L92.4212 3.93395V31.4704C92.4212 34.1525 96.0831 42.02 108.464 42.02C119.235 42.02 129.39 35.2252 129.39 22.1722C129.39 11.2649 121.543 3.93396 111.254 3.93396Z" fill="#20252D"/>
+                    <path d="M447.807 1.21072e-05L447.807 47.1372C447.807 48.2994 448.504 48.4782 449.551 47.9418C457.049 44.3657 465.942 33.2796 465.942 18.796L465.942 3.93377L486.868 3.93379C494.366 3.93377 500.121 6.7947 500.121 14.4836C500.121 31.1126 472.351 45.5112 447.807 57.7762L447.807 79.7486H465.942V55.9881L481.288 49.5298C495.587 49.5298 501.865 58.2038 501.865 79.7483H520C520 55.7005 506.398 46.8479 494.366 44.1657C507.096 37.7285 515.292 31.807 515.292 21.8147C515.292 7.86755 505.003 0 491.576 0L447.807 1.21072e-05Z" fill="#20252D"/>
+                    <path d="M18.4842 79.7484H0V0H49.3494C55.9758 0 67.3105 8.60382 67.3105 19.3323C67.3105 30.0608 53.5345 34.6886 50.0469 35.7615C49.0818 36.0583 46.9082 35.7615 48.6519 33.9735C54.5808 27.5363 50.0469 3.93377 31.2139 3.93377H4.18511C9.64819 23.5401 29.4702 47.9204 53.3602 42.0198C54.3185 41.7831 57.0223 42.0198 55.2783 43.808C53.0087 46.0711 42.723 54.1787 35.2247 54.1787C27.0288 54.1787 21.6231 49.0143 18.4842 44.3443V79.7484Z" fill="#20252D"/>
+                    <path d="M203.501 0.0211377L184.494 0.0211343C169.323 0.0211316 153.105 14.2835 153.105 30.2185C153.105 42.02 163.568 48.1319 169.323 49.5623C170.892 49.9524 171.241 49.5623 171.241 48.4895C171.241 48.4895 169.788 44.7009 169.671 38.2649C169.323 18.9536 178.39 3.23968 190.248 3.23968L192.864 3.23968C206.989 3.23968 219.718 21.8146 219.718 46.8477C219.718 60.4371 216.599 69.9105 211.542 75.2993C210.786 76.1049 208.714 79.3488 212.937 77.9814C229.503 72.6172 238.377 56.0091 238.377 41.147C238.377 20.7839 225.822 0.0211417 203.501 0.0211377Z" fill="#20252D"/>
+                    <path d="M157.116 52.9272C167.928 64.5497 182.052 74.2053 197.572 76.5511C208.626 78.2218 200.188 81 188.156 81C166.533 81 155.198 69.9139 155.198 53.8212C155.198 52.3907 156.265 52.0123 157.116 52.9272Z" fill="#20252D"/>
+                    <path d="M325.392 76.5298C322.602 77.0407 321.382 79.7486 323.802 79.7486H355.386C359.222 79.7486 368.618 65.0863 368.618 53.285C368.618 51.8545 367.571 51.4969 366.7 52.391C356.062 65.2651 339.168 74.0073 325.392 76.5298Z" fill="#20252D"/>
+                    <path d="M260.872 76.5298C258.082 77.0407 256.861 79.7486 259.282 79.7486H290.865C294.702 79.7486 304.097 65.0863 304.097 53.285C304.097 51.8545 303.051 51.4969 302.179 52.391C291.542 65.2651 274.648 74.0073 260.872 76.5298Z" fill="#20252D"/>
+                </svg>
+            </a>
+            <div id="header_subtitle_2"></div>
+            <div id="hamburger" onclick="openHamburger()">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div id="header_buttons" class="stasis">
+            <div class="button_mount">
+                <a href="works.html" class="button text" onclick="fillTransition(false, 'works.html', event)">
+                    works
+                </a>
+            </div>
+            <div class="button_mount">
+                <a href="products.html" class="button text" onclick="fillTransition(false, 'products.html', event)">
+                    products
+                </a>
+            </div>
+            <div class="button_mount">
+                <a href="extras.html" class="button text" onclick="fillTransition(false, 'extras.html', event)">
+                    extras
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="page_transition"></div>
+    <div id="hamburger_menu" class="stasis">
+        <div class="button_mount">
+            <a href="works.html" class="button text" onclick="fillTransition(false, 'works.html', event)">
+                works
+            </a>
+        </div>
+        <div class="button_mount">
+            <a href="products.html" class="button text" onclick="fillTransition(false, 'products.html', event)">
+                products
+            </a>
+        </div>
+        <div class="button_mount">
+            <a href="extras.html" class="button text" onclick="fillTransition(false, 'extras.html', event)">
+                extras
+            </a>
+        </div>
+        <span>socials</span>
+        <div id="socials">
+            <div class="button_mount">
+                <a href="https://www.twitch.tv/proller" target="_blank" class="button circle">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_9144_5)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.61553 0.00292969L0.40625 3.09289L0.40625 15.7228L4.7055 15.7228L4.7055 18.0071L7.12406 18.0071L9.40833 15.7228L12.9019 15.7228L17.6047 11.02L17.6047 0.00292969L1.61553 0.00292969ZM15.9919 10.2143L13.3047 12.9014L9.00549 12.9014L6.72121 15.1857L6.72121 12.9014L3.09337 12.9014L3.09337 1.61505L15.9919 1.61505L15.9919 10.2143ZM13.3047 4.70577L13.3047 9.40336L11.6926 9.40336L11.6926 4.70577L13.3047 4.70577ZM9.00549 4.70577L9.00549 9.40336L7.39337 9.40336L7.39337 4.70577L9.00549 4.70577Z" fill="#000000"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_9144_5">
+                        <rect width="18.0042" height="18.0042" fill="white" transform="translate(0.00292969 0.00292969)"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                </a>
+            </div>
+            <div class="button_mount">
+                <a href="https://x.com/proller_art" target="_blank" class="button circle">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_9144_7)">
+                        <path d="M12.6058 0.75293L15.0604 0.75293L9.69917 6.89635L16.0066 15.2563L11.0685 15.2563L7.2006 10.1851L2.77457 15.2563L0.319003 15.2563L6.05333 8.68477L0.00292969 0.75293L5.0671 0.75293L8.56291 5.387L12.6058 0.75293ZM11.7456 13.7839L13.106 13.7839L4.32693 2.14825L2.86859 2.14825L11.7456 13.7839Z" fill="#000000"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_9144_7">
+                        <rect width="16.0037" height="16.0037" fill="white" transform="translate(0.00292969 0.00292969)"/>
+                        </clipPath>
+                        </defs>
+                    </svg>
+                </a>
+            </div>
+            <div class="button_mount">
+                <a href="https://ko-fi.com/proller" target="_blank" class="button circle">
+                    <svg style="margin-left: 1px" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.2088 6.4832C23.2088 5.36268 23.0569 4.5776 22.7618 4.00502C22.4816 3.46142 22.0357 3.03842 21.2835 2.70384C20.5038 2.35709 19.4082 2.11247 17.8698 1.96029C16.3391 1.80887 14.4305 1.754 12.0551 1.754C9.60506 1.754 7.72001 1.79269 6.26131 1.92796C4.79004 2.06439 3.84595 2.29234 3.2243 2.61455C2.65415 2.91009 2.32616 3.29896 2.11663 3.89555C1.88833 4.54563 1.80093 5.4447 1.80093 6.74594C1.80093 10.2723 2.40365 12.8928 3.6874 14.6175C4.92712 16.283 6.91254 17.2553 10.0762 17.2553C13.4844 17.2553 15.3866 15.778 16.4658 14.332C17.0162 13.5945 17.3597 12.8527 17.565 12.294C17.6672 12.0158 17.734 11.7865 17.7744 11.6306C17.7946 11.5528 17.808 11.4937 17.816 11.4563C17.8201 11.4377 17.8229 11.4245 17.8243 11.4172C17.825 11.4135 17.8254 11.4112 17.8255 11.4105L17.8509 11.2679C17.9107 10.9322 18.2099 10.6869 18.5599 10.6869H18.7113C20.3874 10.6869 21.4795 10.1506 22.1603 9.4198C22.8557 8.67327 23.2088 7.62974 23.2088 6.4832ZM25.0077 6.4832C25.0077 7.96397 24.5512 9.46024 23.4927 10.5966C22.5432 11.6158 21.1764 12.2729 19.4184 12.411C19.375 12.5521 19.3225 12.7111 19.2589 12.8841C19.0117 13.5569 18.5962 14.4572 17.9211 15.3618C16.5492 17.1999 14.1338 19.0068 10.0762 19.0068C6.49375 19.0068 3.89178 17.877 2.23065 15.6454C0.613593 13.4728 0.00195544 10.4009 0.00195312 6.74594C0.00195312 5.41985 0.0832035 4.2716 0.414277 3.32886C0.764117 2.33272 1.38627 1.58314 2.37892 1.0686C3.32013 0.580735 4.55175 0.326989 6.09089 0.184268C7.64265 0.0403824 9.60297 0.00244141 12.0551 0.00244141C14.447 0.00244141 16.4287 0.0570513 18.0518 0.217623C19.6672 0.377432 20.989 0.647356 22.0308 1.11068C23.1 1.58618 23.8797 2.26891 24.3697 3.21956C24.8447 4.14126 25.0077 5.23916 25.0077 6.4832Z" fill="#000000"/>
+                        <path d="M17.9917 4.73165L17.9917 8.05961C17.9917 8.23476 18.1854 8.42385 18.3515 8.4281C19.0183 8.44515 20.6902 8.30614 20.6902 6.48321C20.6902 4.44994 19.0183 4.38124 18.3515 4.4347C18.1854 4.44802 17.9917 4.55649 17.9917 4.73165Z" fill="#000000"/>
+                        <path d="M4.58935 7.97203C4.58935 10.8442 8.53287 13.159 9.78763 13.8228C10.0255 13.9487 10.3076 13.9506 10.5469 13.8273C11.804 13.1798 15.743 10.9161 15.743 7.97203C15.743 5.34469 13.8541 4.55649 12.8646 4.55649C10.7958 4.55649 10.1662 5.95774 10.1662 5.95774C10.1662 5.95774 9.53653 4.55649 7.64761 4.55649C6.29837 4.55649 4.58935 5.43227 4.58935 7.97203Z" fill="#000000"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div id="project_hero">
+            <div id="blob1" class="blobs"></div>
+            <div id="blob2" class="blobs"></div>
+            <div class="project_img frame">
+                <img src="media/works/noir vesper/full.png">
+                <div class="button_mount">
+                    <div class="button circle" onclick="expandImage(this)">
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.19922 9.69922L0.699219 15.1992M0.699219 15.1992V10.1992M0.699219 15.1992H5.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M10.1992 6.19922L15.6992 0.699219M15.6992 0.699219L15.6992 5.69922M15.6992 0.699219L10.6992 0.699218" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="project_summary">
+            <div id="project_title">Noir Vesper Shinigami</div>
+            <div id="project_info">
+                <div id="project_details">
+                    <div class="detail">
+                        <div class="detail_label">Client</div>
+                        <div class="detail_items">
+                            <div>
+                                <a href="https://x.com/noirvesper_en" target="_blank">Noir Vesper</a>
+                                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.353516 12.5L12.3535 0.5M12.3535 0.5H3.02018M12.3535 0.5V9.83333" stroke="#20252D"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <a href="https://cover-corp.com/en" target="_blank">COVER Corp.</a>
+                                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.353516 12.5L12.3535 0.5M12.3535 0.5H3.02018M12.3535 0.5V9.83333" stroke="#20252D"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail">
+                        <div class="detail_label">Software</div>
+                        <div class="detail_items">
+                            <div>Photoshop</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="project_body_text" class="text_block">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let scrollables = [
+            {triggerID: "project_body_text", animateIDs: [], used: false}
+        ];
+    </script>
+    <script src="scripts/hwacheck.js"></script>
+    <script src="scripts/blob.js"></script>
+    <script src="scripts/buttons.js"></script>
+    <script src="scripts/scrolltrigger.js"></script>
+    <script src="scripts/masks.js"></script>
+    <script src="scripts/videohover.js"></script>
+    <script src="scripts/hamburger.js"></script>
+    <script src="scripts/pagetransition.js"></script>
+    <script src="scripts/scrollbar.js"></script>
+    <script src="scripts/clock.js"></script>
+    <script src="scripts/expandimages.js"></script>
+</body>
+</html>

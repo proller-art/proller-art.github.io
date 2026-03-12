@@ -28,7 +28,21 @@
         #extras_temp_text {
             position: relative;
             margin-top: 160px;
-            margin-left: 390px;
+        }
+        @media (max-width: 989px) { /*mobile*/
+            #extras_temp_text {
+                margin-left: 0px;
+            }
+        }
+        @media (min-width: 990px) { /*desktop narrow*/
+            #extras_temp_text {
+                margin-left: 195px;
+            }
+        }
+        @media (min-width: 1380px) { /*full desktop*/
+            #extras_temp_text {
+                margin-left: 390px;
+            }
         }
     </style>
 </head>

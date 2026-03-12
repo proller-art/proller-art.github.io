@@ -1,4 +1,7 @@
 const hasHWA = (() => {
+    // disabling canvas shenanigans for now
+    return false;
+
     // create a test function for both "default" drawing and forced software
     const test = (force=false) => {
         // Firefox (at least on macOS) doesn't accelerate OffscreenCanvas

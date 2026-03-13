@@ -3,14 +3,15 @@ let mouseY = 0;
 let mouseDX = 0;
 let mouseDY = 0;
 let ballCollection = new Map();
-let invRes = 6; // inverse resolution (ex: 2 -> 1/2 resolution)
+let invRes = 2; // inverse resolution (ex: 2 -> 1/2 resolution)
 let ballDensity = .2; // balls per 1000 px^2
 let mouseMotion = [];
-let lastFrame = Date.now();
-let endBlobs = false;
 
-// disabling fancy blobs for now
-if (false) {
+let ringMargin = 24;
+let blurRadius = 12;
+let ringCount = 4;
+
+if (hasHWA) {
     setupBlobCages();
     updateCanvases();
 
@@ -28,49 +29,31 @@ if (false) {
     fillStaticBlobs();
 }
 
+
 function setupBlobCages() {
     let blobCages = document.getElementsByClassName("blobs");
     for (let i = 0; i < blobCages.length; i++) {
         let box = blobCages[i].getBoundingClientRect();
-        // create canvases
-        for (let c = 0; c < 12; c++) {
-            let canvas = document.createElement("canvas");
-            canvas.width = (box.width + 200)/invRes;
-            canvas.height = (box.height + 200)/invRes;
-            if (c % 2 == 0) {
-                if (blobCages[i].classList.contains("invert")) {
-                    canvas.style.filter = "blur(25px) contrast(100) invert()"
-                    canvas.style.mixBlendMode = "lighten";
-                } else {
-                    canvas.style.filter = "blur(25px) contrast(100)"
-                    canvas.style.mixBlendMode = "darken";
-                }
-            } else {
-                if (blobCages[i].classList.contains("invert")) {
-                    canvas.style.filter = "blur(25px) contrast(100)";
-                    canvas.style.mixBlendMode = "darken";
-                } else {
-                    canvas.style.filter = "blur(25px) contrast(100) invert()";
-                    canvas.style.mixBlendMode = "lighten";
-                }
-                
-            }
-            blobCages[i].appendChild(canvas);
+
+        // create canvas
+        let canvas = document.createElement("canvas");
+        canvas.width = (box.width + 200)/invRes;
+        canvas.height = (box.height + 200)/invRes;
+        if (blobCages[i].classList.contains("invert")) {
+            canvas.style.filter = "blur(6px) brightness(.62) contrast(300) invert()";
         }
+        blobCages[i].appendChild(canvas);
+
         blobCages[i].appendChild(document.createElement("div"));
         ballCollection.set(blobCages[i].id, []);
-        let ballCount = Math.floor(box.width * box.height / 1000 * ballDensity) + 5;
+        let ballCount = Math.floor(box.width * box.height / 1000 * ballDensity);
         for (let b = 0; b < ballCount; b++) {
-            ballCollection.get(blobCages[i].id).push({x: Math.random()*(box.width+200)/invRes, y: Math.random()*(box.height+200)/invRes, dx: (Math.random()*2-1)/invRes, dy: (Math.random()*2-1)/invRes, r: (Math.random()*100 + 20)/invRes, grow: (Math.random() > .5)});
+            ballCollection.get(blobCages[i].id).push({x: Math.random()*(box.width+200)/invRes, y: Math.random()*(box.height+200)/invRes, dx: (Math.random()*2-1)/invRes, dy: (Math.random()*2-1)/invRes, r: (Math.random()*60 + 10)/invRes, grow: (Math.random() > .5)});
         }
     }
 }
 
 function updateCanvases() {
-    if (endBlobs) {
-        return;
-    }
-
     // update mouse motion timeouts
     for (let i = 0; i < mouseMotion.length; i++) {
         if (Date.now() - mouseMotion[i].t > 2000) {
@@ -82,14 +65,14 @@ function updateCanvases() {
     let blobCages = document.getElementsByClassName("blobs");
     for (let b = 0; b < blobCages.length; b++) {
         let box = blobCages[b].getBoundingClientRect();
-        let canvases = blobCages[b].querySelectorAll("canvas");
-        for (let c = 0; c < canvases.length; c++) {
-            canvases[c].width = (box.width + 200)/invRes;
-            canvases[c].height = (box.height + 200)/invRes;
-        }
+        let canvas = blobCages[b].querySelector("canvas");
+
+        canvas.width = (box.width + 200)/invRes;
+
         let balls = ballCollection.get(blobCages[b].id);
-        let margin = (100 + canvases.length * 20) / invRes;
+        let margin = (100 + ringCount * 20) / invRes;
         for (let i = 0; i < balls.length; i++) {
+            // wrap to other side if fully off of canvas
             if (balls[i].x < 100/invRes - balls[i].r - margin && balls[i].dx < 0) {
                 balls[i].x = (box.width + 100)/invRes + balls[i].r + margin;
             } else if (balls[i].x > (box.width + 100)/invRes + balls[i].r + margin && balls[i].dx > 0) {
@@ -113,8 +96,8 @@ function updateCanvases() {
                 balls[i].y += dy/6000*(2000+mouseMotion[m].t-Date.now())/3000;
             }
 
-            balls[i].dx = balls[i].dx > 0 ? Math.min(3/invRes, balls[i].dx) : Math.max(-3/invRes, balls[i].dx);
-            balls[i].dy = balls[i].dy > 0 ? Math.min(3/invRes, balls[i].dy) : Math.max(-3/invRes, balls[i].dy);
+            balls[i].dx = balls[i].dx > 0 ? Math.min(2/invRes, balls[i].dx) : Math.max(-2/invRes, balls[i].dx);
+            balls[i].dy = balls[i].dy > 0 ? Math.min(2/invRes, balls[i].dy) : Math.max(-2/invRes, balls[i].dy);
 
             // apply movement
             balls[i].x += balls[i].dx + Math.sin((Date.now()/1000+(balls[i].y)/(400/invRes)))*.8/invRes;
@@ -125,17 +108,27 @@ function updateCanvases() {
                 balls[i].grow = !balls[i].grow;
             }
             balls[i].r += (balls[i].grow ? .1 : -.1)/invRes;
+        }
 
-            for (let c = 0; c < canvases.length; c++) {
-                let canvas = canvases[c];
-                let ctx = canvas.getContext("2d");
+        let ctx = canvas.getContext("2d");
+        for (let c = 0; c < ringCount; c++) {
+            for (let i = 0; i < balls.length; i++) {
+                let radius = balls[i].r + ((ringCount - c) * ringMargin + (c%2==0?0:ringMargin*.9)) / invRes;
                 ctx.beginPath();
-                ctx.arc(balls[i].x, balls[i].y, balls[i].r + ((canvases.length-c-(c%2))*(20/invRes)) + (c%2==0?(-38/invRes):0), 0, Math.PI * 2);
+                ctx.arc(balls[i].x, balls[i].y, radius + blurRadius/invRes, 0, Math.PI * 2);
+                let gradient = ctx.createRadialGradient(balls[i].x, balls[i].y, radius, balls[i].x, balls[i].y, radius + blurRadius/invRes);
+                if (c % 2 == 0) {
+                    gradient.addColorStop(0, "#000000");
+                    gradient.addColorStop(1, "#00000000");
+                } else {
+                    gradient.addColorStop(0, "#FFFFFF");
+                    gradient.addColorStop(1, "#FFFFFF00");
+                }
+                ctx.fillStyle = gradient;
                 ctx.fill();
             }
         }
     }
-    
     window.requestAnimationFrame(updateCanvases);
 }
 

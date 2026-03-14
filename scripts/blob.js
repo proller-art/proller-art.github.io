@@ -4,12 +4,12 @@ let mouseDX = 0;
 let mouseDY = 0;
 let ballCollection = new Map();
 let invRes = 2; // inverse resolution (ex: 2 -> 1/2 resolution)
-let ballDensity = .2; // balls per 1000 px^2
+let ballDensity = .1; // balls per 1000 px^2
 let mouseMotion = [];
 
 let ringMargin = 24;
-let blurRadius = 12;
-let ringCount = 4;
+let blurRadius = 36;
+let ringCount = 6;
 
 if (hasHWA) {
     setupBlobCages();
@@ -40,7 +40,7 @@ function setupBlobCages() {
         canvas.width = (box.width + 200)/invRes;
         canvas.height = (box.height + 200)/invRes;
         if (blobCages[i].classList.contains("invert")) {
-            canvas.style.filter = "blur(6px) brightness(.62) contrast(300) invert()";
+            canvas.style.filter = "blur(6px) brightness(.67) contrast(300) invert()";
         }
         blobCages[i].appendChild(canvas);
 

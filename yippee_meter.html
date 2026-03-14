@@ -79,6 +79,33 @@
             position: relative;
             margin-top: 22px;
         }
+        #project_section1 {
+            position: relative;
+            width: 100%;
+            margin-top: 80px;
+            padding-bottom: 80px;
+        }
+        #project_body_text2 {
+            position: relative;
+            margin-left: 390px;
+            margin-top: 22px;
+        }
+        .double_demo {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            margin-left: 130px;
+            margin-bottom: 80px;
+            height: 480px;
+            width: 1040px;
+            border-radius: 20px;
+        }
+        .double_demo video {
+            position: relative;
+            transform: none;
+            top: auto;
+            left: auto;
+        }
         #blob1, #blob2 {
             position: absolute;
         }
@@ -118,6 +145,19 @@
                 margin-left: 0px;
             }
             #project_body_text {
+                margin-left: 0px;
+            }
+            .double_demo {
+                flex-direction: column-reverse;
+                margin-left: 0px;
+                height: calc((100vw - 84px) / 318px * 588px);
+                width: 100%;
+            }
+            .double_demo video {
+                height: auto;
+                width: 100%;
+            }
+            #project_body_text2 {
                 margin-left: 0px;
             }
             #zoom {
@@ -162,6 +202,18 @@
             #project_body_text {
                 margin-left: 260px
             }
+            .double_demo {
+                margin-left: 65px;
+                height: 360px;
+                width: 780px;
+            }
+            .double_demo video {
+                height: auto;
+                width: 100%;
+            }
+            #project_body_text2 {
+                margin-left: 260px;
+            }
             #zoom {
                 display: flex;
             }
@@ -203,6 +255,14 @@
             }
             #project_body_text {
                 margin-left: 130px
+            }
+            .double_demo {
+                margin-left: 130px;
+                height: 480px;
+                width: 1040px;
+            }
+            #project_body_text2 {
+                margin-left: 390px;
             }
         }
     </style>
@@ -401,27 +461,38 @@
                     </div>
                 </div>
                 <div id="project_body_text" class="text_block">
-                    <span>The Yippee Meter is a streaming overlay that tracks </span>
+                    <span>The Yippee Meter is a Twitch streaming overlay that tracks </span>
                     <span>duplicate messages in your chat and allows your community </span>
                     <span>to collectively cheer the message when enough unique </span>
-                    <span>chatters join in! </span>
-                    <br><br>
-                    <span>Sending duplicates of a message will fill a meter that pops </span>
-                    <span>up on screen, letting others know it's time to join in. The </span>
-                    <span>meter styling, mascot animations, and sound effects are fully </span>
-                    <span>customizable! Customize the animation with your own </span>
-                    <span>cheering mascots and confetti colors to fit your community's </span>
-                    <span>aesthetic! </span>
-                    <br><br>
-                    <span>The meter also has balance options so you can scale </span>
-                    <span>difficulty based on the size or activity of your chat.</span>
+                    <span>chatters join in! Sending duplicates of a message will fill a </span>
+                    <span>meter that pops up on screen, letting others know it's time to </span>
+                    <span>join in. Fair warning: this widget will permanently change the </span>
+                    <span>psyche of your community.</span>
                 </div>
+            </div>
+        </div>
+        <div id="project_section1">
+            <div class="double_demo frame">
+                <video autoplay muted loop>
+                    <source src="media/products/yippee meter/settingsdemo1.webm" type="video/webm">
+                </video>
+                <video autoplay muted loop>
+                    <source src="media/products/yippee meter/settingsdemo2.webm" type="video/webm">
+                </video>
+            </div>
+            <div id="project_body_text2" class="text_block">
+                <span>The meter styling, mascot animations, and sound effects are </span>
+                <span>fully customizable! Customize the animation with your own </span>
+                <span>cheering mascots and confetti colors to fit your community's </span>
+                <span>aesthetic! The meter also has balance options so you can </span>
+                <span>scale difficulty based on the size or activity of your chat.</span>
             </div>
         </div>
     </div>
     <script>
         let scrollables = [
-            {triggerID: "project_body_text", animateIDs: [], used: false}
+            {triggerID: "project_body_text", animateIDs: [], used: false},
+            {triggerID: "project_body_text2", animateIDs: [], used: false}
         ];
     </script>
     <script src="scripts/hwacheck.js"></script>

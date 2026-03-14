@@ -644,7 +644,7 @@ a + svg {
     width: calc(100% + 200px);
     background-color: white;
     mix-blend-mode: multiply;
-    filter: blur(6px) brightness(.67) contrast(600);
+    filter: blur(6px) brightness(.655) contrast(400);
 }
 .blobs div {
     height: 100%;

@@ -484,6 +484,7 @@ a + svg {
     user-select: none;
     transition: auto;
     background-color: #20252D;
+    overflow: hidden;
 }
 .frame video {
     position: absolute;

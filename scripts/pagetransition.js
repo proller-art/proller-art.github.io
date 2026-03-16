@@ -46,10 +46,14 @@ let transitionIsAnimating = false;
 
 emptyTransition(false);
 
-function fillTransition(imageBg, url, event) {
+function fillTransition(imageBg, url, event, hamburger) {
     // prevent immediate link
     if (event) {
         event.preventDefault();
+    }
+
+    if (hamburger) {
+        closeHamburger();
     }
 
     imageExpand = imageBg;

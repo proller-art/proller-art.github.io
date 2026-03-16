@@ -7,6 +7,7 @@ let imageFrameRect;
 let imageFrame;
 let imageOffset;
 let originalScrollPosition = 0;
+let eventTimeout;
 
 zoom_thumb.addEventListener("mousedown", handleZoomScrollDrag);
 
@@ -37,6 +38,7 @@ function expandImage(button) {
     image_expand.style.display = "block";
     imageFrame.parentElement.insertBefore(placeholder, imageFrame);
     image_expand.prepend(imageFrame);
+    imageFrame.style.position = "absolute";
     
     // hide expand button
     void (button.offsetHeight);
@@ -54,6 +56,8 @@ function expandImage(button) {
     imageFrame.style.borderRadius = "0px";
     imageFrame.style.left = window.innerWidth/2 + "px";
     imageFrame.style.top = window.innerHeight/2 + "px";
+    imageFrame.style.marginLeft = "0px";
+    imageFrame.style.marginTop = "0px";
     imageFrame.style.border = "1px solid #F2F2F290";
 
     // calculate minimum scale
@@ -78,13 +82,15 @@ function expandImage(button) {
         void (image_expand.offsetHeight);
         blob1_svg.style.transform = blob2_svg.style.transform = "translateY(0%)";
 
+        document.addEventListener("keydown", handleEscapeKey);
+
         zoomPercent = 0;
         zoom_thumb.style.left = "0px";
         image_expand_bar.style.display = "flex";
         void (image_expand_bar.offsetHeight);
         image_expand_bar.style.bottom = "80px";
 
-        setTimeout(() => {
+        eventTimeout = setTimeout(() => {
             imageFrame.style.transition = "left 1s cubic-bezier(0.23, 1, 0.320, 1), top 1s cubic-bezier(0.23, 1, 0.320, 1), height 1s 1s cubic-bezier(0.23, 1, 0.320, 1), width 1s 1s cubic-bezier(0.23, 1, 0.320, 1), border-radius 1s 1s cubic-bezier(0.23, 1, 0.320, 1), border 1s 1s cubic-bezier(0.23, 1, 0.320, 1), transform 1s cubic-bezier(0.23, 1, 0.320, 1)";
             // add listeners for resizing and UI controls
             imageFrame.style.cursor = "grab";
@@ -95,9 +101,20 @@ function expandImage(button) {
     }, 1000);
 }
 
+// close on escape key press
+function handleEscapeKey(e) {
+    if (e.key === "Escape") {
+        closeImage();
+    }
+}
+
 // return image to original position and close fullscreen UI
 function closeImage() {
+    // clear timeout that adds events from original expand function
+    clearTimeout(eventTimeout);
+
     // remove events
+    document.removeEventListener("keydown", handleEscapeKey);
     window.removeEventListener("resize", handleResizeImageExpand);
     document.removeEventListener("wheel", handleZoomWheel);
     imageFrame.removeEventListener("mousedown", handleImageDrag);
@@ -157,6 +174,9 @@ function closeImage() {
             imageFrame.style.transform = null;
             imageFrame.style.left = null;
             imageFrame.style.top = null;
+            imageFrame.style.marginLeft = null;
+            imageFrame.style.marginTop = null;
+            imageFrame.style.position = null;
             img_placeholder.parentElement.insertBefore(imageFrame, img_placeholder);
             img_placeholder.remove();
 

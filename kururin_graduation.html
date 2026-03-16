@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project.css">
     <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
     <link rel="shortcut icon" href="favicon/favicon.ico" />
@@ -25,184 +26,22 @@
     <meta name="apple-mobile-web-app-title" content="Proller" />
     <link rel="manifest" href="favicon/site.webmanifest" />
     <style>
-        #project_hero {
-            position: relative;
-            width: 100%;
-            margin-bottom: 40px;
-        }
-        .project_img {
-            position: absolute;
-            border-radius: 20px;
-            overflow: hidden;
-            filter: drop-shadow(0px 4px 4px #20252d55);
-        }
-        #project_summary {
-            position: relative;
-            width: 100%;
-            padding-bottom: 80px;
-        }
-        #project_title {
-            height: 80px;
-            width: 390px;
-            text-transform: uppercase;
-            line-height: 32px;
-            font-size: 36px;
-            font-weight: 900;
-        }
-        #project_info {
-            display: flex;
-        }
-        #project_details {
-            display: flex;
-            flex-direction: column;
-            margin-top: 22px;
-        }
-        .detail {
-            display: flex;
-            flex-direction: row;
-            margin-bottom: 40px;
-        }
-        .detail_label {
-            width: 195px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-        .detail_items {
-            display: flex;
-            flex-direction: column;
-            width: 195px;
-        }
-        .detail_items div {
-            height: 28px;
-        }
-        #project_body_text {
-            position: relative;
-            margin-top: 22px;
-        }
-        #blob1, #blob2 {
-            position: absolute;
-        }
         @media (max-width: 989px) { /*mobile*/
-            #project_hero {
-                height: calc((100vw - 84px) / 318px * 400px);
-            }
-            .project_img {
-                top: 0px;
-                left: 0px;
-                height: calc((100vw - 84px) / 318px * 400px);
-                width: 100%;
-            }
-            .project_img img {
+            #hero img {
                 width: 100%;
                 transform: translate(-50%, -40%);
             }
-            #blob1 {
-                top: calc((100vw - 84px) / 318px * 40px);
-                right: -42px;
-                height: calc((100vw - 84px) / 318px * 240px);
-                width: 50vw;
-            }
-            #blob2 {
-                bottom: calc((100vw - 84px) / 318px * 40px);
-                left: -42px;
-                height: calc((100vw - 84px) / 318px * 240px);
-                width: 50vw;
-            }
-            #project_title {
-                margin-left: 0px;
-            }
-            #project_info {
-                flex-direction: column;
-            }
-            #project_details {
-                margin-left: 0px;
-            }
-            #project_body_text {
-                margin-left: 0px;
-            }
-            #zoom {
-                display: none;
-            }
         }
         @media (min-width: 990px) { /*desktop narrow*/
-            #project_hero {
-                height: 400px;
-            }
-            .project_img {
-                top: 40px;
-                left: 65px;
-                height: 360px;
-                width: 780px;
-            }
-            .project_img img {
+            #hero img {
                 width: 100%;
                 transform: translate(-50%, -28%);
-            }
-            #blob1 {
-                top: 0px;
-                right: 0px;
-                height: 360px;
-                width: 260px;
-            }
-            #blob2 {
-                bottom: 40px;
-                left: 0px;
-                height: 200px;
-                width: 130px;
-            }
-            #project_title {
-                margin-left: 65px;
-            }
-            #project_info {
-                flex-direction: column;
-            }
-            #project_details {
-                margin-left: 65px;
-            }
-            #project_body_text {
-                margin-left: 260px
-            }
-            #zoom {
-                display: flex;
             }
         }
         @media (min-width: 1380px) { /*full desktop*/
-            #project_hero {
-                height: 520px;
-            }
-            .project_img {
-                top: 40px;
-                left: 130px;
-                height: 480px;
-                width: 1040px;
-            }
-            .project_img img {
+            #hero img {
                 width: 100%;
                 transform: translate(-50%, -28%);
-            }
-            #blob1 {
-                top: 0px;
-                right: 0px;
-                height: 440px;
-                width: 445px;
-            }
-            #blob2 {
-                bottom: 40px;
-                left: 0px;
-                height: 320px;
-                width: 260px;
-            }
-            #project_title {
-                margin-left: 130px;
-            }
-            #project_info {
-                flex-direction: row;
-            }
-            #project_details {
-                margin-left: 130px;
-            }
-            #project_body_text {
-                margin-left: 130px
             }
         }
     </style>
@@ -313,17 +152,17 @@
     <div id="page_transition"></div>
     <div id="hamburger_menu" class="stasis">
         <div class="button_mount">
-            <a href="works.html" class="button text" onclick="fillTransition(false, 'works.html', event)">
+            <a href="works.html" class="button text" onclick="fillTransition(false, 'works.html', event, true)">
                 works
             </a>
         </div>
         <div class="button_mount">
-            <a href="products.html" class="button text" onclick="fillTransition(false, 'products.html', event)">
+            <a href="products.html" class="button text" onclick="fillTransition(false, 'products.html', event, true)">
                 products
             </a>
         </div>
         <div class="button_mount">
-            <a href="extras.html" class="button text" onclick="fillTransition(false, 'extras.html', event)">
+            <a href="extras.html" class="button text" onclick="fillTransition(false, 'extras.html', event, true)">
                 extras
             </a>
         </div>
@@ -372,7 +211,7 @@
         <div id="project_hero">
             <div id="blob1" class="blobs"></div>
             <div id="blob2" class="blobs"></div>
-            <div class="project_img frame">
+            <div id="hero" class="project_media frame">
                 <img src="media/works/kururin/full.png">
                 <div class="button_mount">
                     <div class="button circle" onclick="expandImage(this)">

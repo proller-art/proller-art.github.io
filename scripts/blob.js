@@ -68,6 +68,7 @@ function updateCanvases() {
         let canvas = blobCages[b].querySelector("canvas");
 
         canvas.width = (box.width + 200)/invRes;
+        canvas.height = (box.height + 200)/invRes;
 
         let balls = ballCollection.get(blobCages[b].id);
         let margin = (100 + ringCount * 20) / invRes;

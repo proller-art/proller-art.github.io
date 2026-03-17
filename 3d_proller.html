@@ -25,6 +25,24 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Proller" />
     <link rel="manifest" href="favicon/site.webmanifest" />
+    <style>
+        @media (max-width: 989px) { /*mobile*/
+            #full_model img {
+                width: 155%;
+                transform: translate(-50%, -50%);
+            }
+        }
+        @media (min-width: 990px) { /*desktop narrow*/
+            #full_model img {
+                transform: translate(-50%, -30%);
+            }
+        }
+        @media (min-width: 1380px) { /*full desktop*/
+            #full_model img {
+                transform: translate(-50%, -30%);
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="image_expand_bg"></div>
@@ -283,6 +301,34 @@
                 <span>painting finished already meant that I could focus all of my </span>
                 <span>energy on learning the tools instead.</span>
             </div>
+            <div id="full_model" class="project_media frame">
+                <img src="media/works/3d proller/full model.png">
+                <div class="button_mount">
+                    <div class="button circle" onclick="expandImage(this)">
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.19922 9.69922L0.699219 15.1992M0.699219 15.1992V10.1992M0.699219 15.1992H5.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M10.1992 6.19922L15.6992 0.699219M15.6992 0.699219L15.6992 5.69922M15.6992 0.699219L10.6992 0.699218" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="project_body_text4" class="text_block">
+                <span>It wasn't an entirely painless process though. Figuring out </span>
+                <span>how to rig the model using weight painting for an armature </span>
+                <span>was a real challenge. I made sure to include additional bones </span>
+                <span>to be used for clothing physics in Unity later. The physics </span>
+                <span>work for the most part but admittedly the meshes clip </span>
+                <span>through each other with certain movements and I'll likely be </span>
+                <span>revisiting the weight painting in the future. This rig needs </span>
+                <span>improvements if I ever want to make the jump from face </span>
+                <span>tracking to full-body tracking. Overall, it's still an exciting </span>
+                <span>upgrade and it's been a blast to play around with on stream!</span>
+            </div>
+            <div class="project_media frame">
+                <video autoplay muted loop>
+                    <source src="media/works/3d proller/unity.webm" type="video/webm">
+                </video>
+            </div>
         </div>
     </div>
     <script>
@@ -290,6 +336,7 @@
             {triggerID: "project_body_text", animateIDs: [], used: false},
             {triggerID: "project_body_text2", animateIDs: [], used: false},
             {triggerID: "project_body_text3", animateIDs: [], used: false},
+            {triggerID: "project_body_text4", animateIDs: [], used: false}
         ];
     </script>
     <script src="scripts/hwacheck.js"></script>

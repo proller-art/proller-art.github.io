@@ -12,12 +12,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Proller - Extras</title>
+    <title>Proller - Endless Sudoku</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/project.css">
     <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
     <link rel="shortcut icon" href="favicon/favicon.ico" />
@@ -25,59 +26,359 @@
     <meta name="apple-mobile-web-app-title" content="Proller" />
     <link rel="manifest" href="favicon/site.webmanifest" />
     <style>
-        #items {
+        #board {
+            position: relative;
             display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            width: 100%;
+            flex-direction: column;
+            height: fit-content;
+            width: fit-content;
+            background-color: #181818;
+            perspective: 2000px;
             margin-top: 40px;
-            margin-bottom: 80px;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+            border-radius: 10px;
         }
-        #items .mount {
-            margin-bottom: 120px;
+        .row {
+            display: flex;
+            flex-direction: row;
+            transform-style: preserve-3d;
         }
-        #blob1, #blob2{
+        .col {
+            box-sizing: border-box;
+            height: 86px;
+            width: 86px;
+            
+            transform-style: preserve-3d;
+            border: 1px solid #141414;
+        }
+        .col.topEdge {
+            border-top-width: 5px;
+        }
+        .col.bottomEdge {
+            border-bottom-width: 5px;
+        }
+        .col.leftEdge {
+            border-left-width: 5px;
+        }
+        .col.rightEdge {
+            border-right-width: 5px;
+        }
+        .col.innerVert {
+            border-left-width: 3px;
+        }
+        .col.innerHori {
+            border-top-width: 3px;
+        }
+        .col+.col {
+            margin-left: -1px;
+        }
+        .row+.row {
+            margin-top: -1px;
+        }
+        .cell {
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+            transform-style: preserve-3d;
+            background-color: #f2f2f2;
+        }
+        .cell.flip {
+            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipAwayColor 1s linear forwards;
+        }
+        .cell.unflip {
+            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipBackColor 1s linear forwards;
+            transform: rotateX(180deg);
+            background-color: #282828;
+        }
+        .cell .value {
+            padding-top: 12px;
+            text-align: center;
+            color: #141414;
+            font-size: 46px;
+            font-weight: 700;
+            transition: color .5s;
+            transform-style: preserve-3d;
+            transform: translateZ(1px);
+        }
+        .cell .value.flip {
+            animation: flipAwayContent 1s linear forwards;
+        }
+        .cell .value.unflip {
+            animation: flipBackContent 1s linear forwards;
+            opacity: 0%;
+        }
+        .cell .candidate {
             position: absolute;
+            color: #6b6b6b;
+            font-size: 14px;
+            display: none;
+
+            transform-style: preserve-3d;
+            transform: translateZ(1px);
+        }
+        .cell .candidate.flip {
+            animation: flipAwayContent 1s linear forwards;
+        }
+        .cell .candidate.unflip {
+            animation: flipBackContent 1s linear forwards;
+            opacity: 0%;
+        }
+        .cell.locked {
+            background-color: #d3d3d3;
+        }
+        .cell.locked.selected {
+            background-color: #85b8c3 !important;
+        }
+        .cell.locked.flip {
+            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipAwayColorLocked 1s linear forwards;
+        }
+        .cell.locked.unflip {
+            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipBackColorLocked 1s linear forwards;
+            transform: rotateX(180deg);
+            background-color: #282828;
+        }
+        .cell .wrong_dot {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            height: 15px;
+            width: 15px;
+            border-radius: 10px;
+            background-color: #de5959;
+            transition: transform .2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+
+            transform-style: preserve-3d;
+            transform: scale(0%);
+        }
+        .cell .wrong_dot.flip {
+            animation: flipAwayContent 1s linear forwards;
+        }
+        .cell .wrong_dot.unflip {
+            animation: flipBackContent 1s linear forwards;
+            opacity: 0%;
+        }
+        .cell.wrong .wrong_dot {
+            transform: scale(100%);
+        }
+        .cell.empty .candidate {
+            display: block;
+        }
+        .cell.empty .value {
+            display: none;
+        }
+        .cell.selected {
+            background-color: #aef0ff !important;
+        }
+        .can1 {
+            top: 10px;
+            left: 12px;
+        }
+        .can2 {
+            top: 10px;
+            left: 37px;
+        }
+        .can3 {
+            top: 10px;
+            left: 62px;
+        }
+        .can4 {
+            top: 34px;
+            left: 12px;
+        }
+        .can5 {
+            top: 34px;
+            left: 37px;
+        }
+        .can6 {
+            top: 34px;
+            left: 62px;
+        }
+        .can7 {
+            top: 58px;
+            left: 12px;
+        }
+        .can8 {
+            top: 58px;
+            left: 37px;
+        }
+        .can9 {
+            top: 58px;
+            left: 62px;
+        }
+        @keyframes flipAway {
+            0% {
+                transform: rotateX(0deg);
+            } 100% {
+                transform: rotateX(180deg);
+            }
+        }
+        @keyframes flipBack {
+            0% {
+                transform: rotateX(180deg);
+            } 100% {
+                transform: rotateX(360deg);
+            }
+        }
+        @keyframes flipAwayContent {
+            0% {
+                opacity: 100%;
+            } 10% {
+                opacity: 100%;
+            } 10.1% {
+                opacity: 0%;
+            } 100% {
+                opacity: 0%;
+            }
+        }
+        @keyframes flipBackContent {
+            0% {
+                opacity: 0%;
+            } 10% {
+                opacity: 0%;
+            } 10.1% {
+                opacity: 100%;
+            } 100% {
+                opacity: 100%;
+            }
+        }
+        @keyframes flipAwayColor {
+            0% {
+                background-color: #f2f2f2;
+            } 10% {
+                background-color: #494949;
+            } 10.1% {
+                background-color: #2d2d2d;
+            } 40% {
+                background-color: #282828;
+            } 60% {
+                background-color: #323232;
+            } 70% {
+                background-color: #282828;
+            } 100% {
+                background-color: #282828;
+            }
+        }
+        @keyframes flipBackColor {
+            0% {
+                background-color: #282828;
+            } 10% {
+                background-color: #282828;
+            } 10.1% {
+                background-color: #494949;
+            } 40% {
+                background-color: #f2f2f2;
+            } 60% {
+                background-color: #ffffff;
+            } 70% {
+                background-color: #f2f2f2;
+            } 100% {
+                background-color: #f2f2f2;
+            }
+        }
+        @keyframes flipAwayColorLocked {
+            0% {
+                background-color: #d3d3d3;
+            } 10% {
+                background-color: #494949;
+            } 10.1% {
+                background-color: #2d2d2d;
+            } 40% {
+                background-color: #282828;
+            } 60% {
+                background-color: #323232;
+            } 70% {
+                background-color: #282828;
+            } 100% {
+                background-color: #282828;
+            }
+        }
+        @keyframes flipBackColorLocked {
+            0% {
+                background-color: #282828;
+            } 10% {
+                background-color: #282828;
+            } 10.1% {
+                background-color: #494949;
+            } 40% {
+                background-color: #d3d3d3;
+            } 60% {
+                background-color: #ececec;
+            } 70% {
+                background-color: #d3d3d3;
+            } 100% {
+                background-color: #d3d3d3;
+            }
         }
         @media (max-width: 989px) { /*mobile*/
-            #items {
-                padding: 0;
-            }
-            #blob1, #blob2 {
-                display: none;
+            #board {
+                transform: translate(-50%, calc((100vw) / 850px * 50% - 50%)) scale(calc((100vw) / 850px));
             }
         }
         @media (min-width: 990px) { /*desktop narrow*/
-            #items {
-                padding: 0 65px;
-            }
-            #items .mount:nth-child(3n-1) {
-                margin-top: 0;
-            }
-            #items .mount:nth-child(even) {
-                margin-top: 120px;
-            }
-            #blob1, #blob2 {
-                position: absolute;
-                height: 200px;
-                width: 455px;
-            }
-            #blob1 {
-                top: 40px;
-                right: 0px;
-            }
-            #blob2 {
-                top: 440px;
-                right: auto;
-                left: 0px;
+            #board {
+                margin-top: 40px;
+                transform: translateX(-50%);
             }
         }
         @media (min-width: 1380px) { /*full desktop*/
-            
+            #board {
+                
+            }
         }
     </style>
 </head>
 <body>
+    <div id="image_expand_bg"></div>
+    <div id="image_expand" class="stasis">
+        <div id="image_expand_blob1" class="blobs invert stasis">
+            <svg id="blob1_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="1920" height="720" fill="url(#paint0_radial_11606_2)"/>
+                <defs>
+                <radialGradient id="paint0_radial_11606_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960) rotate(90) scale(360 960)">
+                <stop stop-color="#20252D" stop-opacity="0"/>
+                <stop offset="1" stop-color="#20252D"/>
+                </radialGradient>
+                </defs>
+            </svg>
+        </div>
+        <div id="image_expand_blob2" class="blobs invert stasis">
+            <svg id="blob2_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="1920" height="720" fill="url(#paint0_radial_11613_2)"/>
+                <defs>
+                <radialGradient id="paint0_radial_11613_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 720) rotate(-90) scale(360 960)">
+                <stop stop-color="#20252D" stop-opacity="0"/>
+                <stop offset="1" stop-color="#20252D"/>
+                </radialGradient>
+                </defs>
+            </svg>
+        </div>
+        <div id="image_expand_bar" class="stasis">
+            <div id="zoom">
+                <div class="label">zoom</div>
+                <svg id="zoom_minus" width="16" height="2" viewBox="0 0 16 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="16" height="1.5" rx="0.75" fill="#20252D"/>
+                </svg>
+                <div id="zoom_track">
+                    <div id="zoom_thumb"></div>
+                </div>
+                <svg id="zoom_plus" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect y="7.25" width="16" height="1.5" rx="0.75" fill="#20252D"/>
+                    <rect x="8.75" width="16" height="1.5" rx="0.75" transform="rotate(90 8.75 0)" fill="#20252D"/>
+                </svg>
+            </div>
+            <div class="button_mount">
+                <div class="button circle" onclick="closeImage()">
+                    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0.699219 15.1992L6.19922 9.69922M6.19922 9.69922L6.19922 14.6992M6.19922 9.69922L1.19922 9.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        <path d="M15.6992 0.699219L10.1992 6.19922M10.1992 6.19922V1.19922M10.1992 6.19922L15.1992 6.19922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="scrollbar">
         <div id="scrollbar_track">
             <div id="scrollbar_thumb"></div>
@@ -191,25 +492,25 @@
         </div>
     </div>
     <div id="content">
-        <div id="blob1" class="blobs"></div>
-        <div id="blob2" class="blobs"></div>
-        <div id="items" class="item_row">
-            <div class="mount">
-                <a href="sudoku.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'sudoku.html', event)">
-                    <img src="media/extras/sudoku/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Endless Sudoku
-                    </div>
-                    Game
-                </div>
+        <div id="board"></div>
+        <div class="project_section">
+            <div id="description" class="text_block">
+                <span>This is a Sisyphean sudoku game! After each level, the board </span>
+                <span>will reset and it will give you an even harder one. There is no </span>
+                <span>end. It will keep making puzzles. If you enjoy filling in sudoku </span>
+                <span>puzzles when you're bored, this is the place to be! It's not </span>
+                <span>currently playable on mobile.</span>
+                <br><br>
+                <span>To fill cells, select a cell with left-click, then use the 1-9 keys </span>
+                <span>to enter a number. To make a note within a cell, hold Shift </span>
+                <span>before hitting 1-9 to toggle the candidate. To select multiple </span>
+                <span>cells at once, hold Shift while left-clicking.</span>
             </div>
         </div>
     </div>
     <script>
         let scrollables = [
-            {triggerID: "items", animateIDs: [], used: false}
+            {triggerID: "description", animateIDs: [], used: false}
         ];
     </script>
     <script src="scripts/hwacheck.js"></script>
@@ -222,5 +523,6 @@
     <script src="scripts/pagetransition.js"></script>
     <script src="scripts/scrollbar.js"></script>
     <script src="scripts/clock.js"></script>
+    <script src="scripts/sudoku.js"></script>
 </body>
 </html>

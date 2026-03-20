@@ -26,10 +26,20 @@
     <meta name="apple-mobile-web-app-title" content="Proller" />
     <link rel="manifest" href="favicon/site.webmanifest" />
     <style>
+        #animation_demo {
+            background-color: #f2f2f2;
+        }
+        #animation_demo video {
+            border-radius: 20px;
+            margin: 0px 30px 0px -10px;
+        }
         @media (max-width: 989px) { /*mobile*/
             #hero img {
                 width: 560%;
                 transform: translate(-50%, -42%);
+            }
+            #animation_demo video {
+                margin: -10px 0px 30px 0px;
             }
         }
         @media (min-width: 990px) { /*desktop narrow*/
@@ -247,14 +257,59 @@
                     </div>
                 </div>
                 <div id="project_body_text" class="text_block">
-                    <span></span>
+                    <span>This project is the largest illustration I've made to-date. It's </span>
+                    <span>an animated ultrawide panoramic talkshow set that's made </span>
+                    <span>up of three connected scenes. It was a welcome challenge </span>
+                    <span>and an honor to adapt to a new style while incorporating </span>
+                    <span>GEEGA's branding. There was a lot of strategy in figuring out </span>
+                    <span>the best way to approach an illustration that contains </span>
+                    <span>multiple scenes. </span>
+                    <br><br>
+                    <span>The goal was to have a background that was large enough </span>
+                    <span>outside of the main desk scene to pan to objects off-screen. </span>
+                    <span>We ended up settling on adding a stage scene for revealing </span>
+                    <span>things from behind a curtain, and a lounge scene for a more </span>
+                    <span>casual decor that was fit for story time. To pan to objects in </span>
+                    <span>other parts of the set, the illustration needed to be a high </span>
+                    <span>enough resolution to maintain fidelity while zoomed in. It </span>
+                    <span>would also need to be a continuous set where each scene </span>
+                    <span>connects to the others.</span>
                 </div>
+            </div>
+        </div>
+        <div class="project_section">
+            <div id="animation_demo" class="project_media_double frame">
+                <video autoplay muted loop>
+                    <source src="media/works/geega/fireplace.webm" type="video/webm">
+                </video>
+                <video autoplay muted loop>
+                    <source src="media/works/geega/mug.webm" type="video/webm">
+                </video>
+            </div>
+            <div id="project_body_text2" class="text_block">
+                <span>My first instinct was to make an extra wide 1-point </span>
+                <span>perspective illustration. With GEEGA seated right in the </span>
+                <span>middle it had a funny resemblance to The Last Supper. This </span>
+                <span>worked well for designing and laying things out, but later </span>
+                <span>realized that 1-point perspective wasn't adequate for </span>
+                <span>something this wide. </span>
+                <br><br>
+                <span>The farther you get from the vanishing point, the more </span>
+                <span>distorted and stretched the view becomes. Cropping the </span>
+                <span>side of a 1-point perspective illustration feels unnatural and </span>
+                <span>is more of a peripheral view rather than one where you're </span>
+                <span>looking directly at the scene. I experimented with a bulge </span>
+                <span>distortion to curve the sketch towards two new focal points </span>
+                <span>on the sides and found that it better represented camera </span>
+                <span>rotation within a scene. The outer edges felt more like the </span>
+                <span>camera was pointing at another part of the set.</span>
             </div>
         </div>
     </div>
     <script>
         let scrollables = [
-            {triggerID: "project_body_text", animateIDs: [], used: false}
+            {triggerID: "project_body_text", animateIDs: [], used: false},
+            {triggerID: "project_body_text2", animateIDs: [], used: false}
         ];
     </script>
     <script src="scripts/hwacheck.js"></script>

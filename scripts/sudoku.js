@@ -18,7 +18,7 @@ if (!localStorage.getItem("endlessSudokuLevel")) {
 } else {
     level = localStorage.getItem("endlessSudokuLevel");
 }
-difficulty += level;
+difficulty += +level;
 
 
 const colLetters = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];

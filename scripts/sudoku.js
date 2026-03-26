@@ -2,16 +2,27 @@
 let pause = false;
 let backtrack = 0;
 let notes = new Map(); // A1 : (can1 : true)
-let difficulty = 48;
-let difficultyIncrease = 2;
+let difficulty = 40;
+let difficultyIncrease = 1;
 let keyControl = false;
 let keyShift = false;
-let muted = true;
+let muted = false;
+let flipping = false;
+let noting = false;
+let level = 1;
 
 // --- SETUP ---
+// load current level or initialize storage
+if (!localStorage.getItem("endlessSudokuLevel")) {
+    localStorage.setItem("endlessSudokuLevel", level);
+} else {
+    level = localStorage.getItem("endlessSudokuLevel");
+}
+difficulty += level;
+
+
 const colLetters = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
-const borderSize = "5px";
-const darkBorder = "#141414";
+let boardRect = board.getBoundingClientRect();
 // generate 9x9 of cols
 for (let r = 0; r < 9; r ++) {
     let row = document.createElement("div");
@@ -19,24 +30,6 @@ for (let r = 0; r < 9; r ++) {
     for (let c = 0; c < 9; c++) {
         let col = document.createElement("div");
         col.classList.add("col");
-        // outer borders
-        if (r == 0) {
-            col.classList.add("topEdge");
-        } else if (r == 8) {
-            col.classList.add("bottomEdge");
-        }
-        if (c == 0) {
-            col.classList.add("leftEdge");
-        } else if (c == 8) {
-            col.classList.add("rightEdge");
-        }
-        // // inner borders
-        if (r == 3 || r == 6) {
-            col.classList.add("innerHori");
-        }
-        if (c == 3 || c == 6) {
-            col.classList.add("innerVert");
-        }
 
         let cell = document.createElement("div");
         cell.classList.add("cell");
@@ -48,13 +41,26 @@ for (let r = 0; r < 9; r ++) {
         dot.classList.add("wrong_dot");
         let flipAudio = new Audio("media/extras/sudoku/flip" + Math.floor(Math.random()*4) + ".mp3");
 
+        let candidates = document.createElement("div");
+        candidates.classList.add("candidates");
+
         for (let i = 0; i < 9; i++) {
             let candidate = document.createElement("div");
             candidate.classList.add("candidate");
-            candidate.classList.add("can" + (i+1));
             candidate.innerText = i+1;
-            cell.appendChild(candidate);
+            candidates.appendChild(candidate);
         }
+        candidates.style.opacity = "0%";
+        cell.appendChild(candidates);
+
+        let display = document.createElement("div");
+        display.classList.add("display");
+        let displayNum = document.createElement("div");
+        displayNum.classList.add("num");
+        displayNum.innerText = level;
+        displayNum.style.opacity = Math.random() * .2 + .8;
+        display.appendChild(displayNum);
+        cell.appendChild(display);
         
         cell.classList.add("empty");
         cell.classList.add("flip");
@@ -70,6 +76,9 @@ for (let r = 0; r < 9; r ++) {
     }
     board.appendChild(row);
 }
+adjustDisplayOffsets();
+
+window.addEventListener("resize", adjustDisplayOffsets);
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Control") {
@@ -77,22 +86,13 @@ document.addEventListener("keydown", (e) => {
     } else if (e.key === "Shift") {
         keyShift = true;
     }
-    let selected = document.getElementsByClassName("selected");
     let canKeys = ["!","@","#","$","%","^","&","*","(",")"];
     if (keyShift && canKeys.includes(e.key)) {
-        for (let i = 0; i < selected.length; i++) {
-            noteCell(selected[i].id, `${canKeys.indexOf(e.key) + 1}`);
-        }
+        noteSelected(`${canKeys.indexOf(e.key) + 1}`);
     } else if (/[1-9]/.test(e.key)) {
-        while (selected.length > 0) {
-            changeCell(selected[0].id, e.key);
-            selected[0].classList.remove("selected");
-        }
+        changeSelected(e.key);
     } else if (e.key === "Backspace" || e.key === "0") {
-        while (selected.length > 0) {
-            changeCell(selected[0].id, 0);
-            selected[0].classList.remove("selected");
-        }
+        changeSelected(0);
     }
 });
 document.addEventListener("keyup", (e) => {
@@ -103,7 +103,9 @@ document.addEventListener("keyup", (e) => {
     }
 });
 
-createBoard();
+setTimeout(() => {
+    createBoard();
+}, 2000);
 
 // --- FUNCTIONS ---
 async function createBoard() {
@@ -409,7 +411,7 @@ function checkCell(coord, prev) {
     }
     return valid;
 }
-async function changeCell(coord, value, color, user) {
+async function changeCell(coord, value, color) {
     let cell = document.getElementById(coord);
     let valueEl = cell.getElementsByClassName("value")[0];
     if (cell.classList.contains("locked")) {
@@ -422,13 +424,17 @@ async function changeCell(coord, value, color, user) {
     valueEl.innerText = value;
     if (value == 0) {
         cell.classList.add("empty");
+        cell.getElementsByClassName("candidates")[0].style.display = null;
     } else {
         cell.classList.remove("empty");
+        cell.getElementsByClassName("candidates")[0].style.display = "none";
     }
     updateCandidates();
+    checkCell(coord, prev);
     await unflipCell(coord);
     valueEl.style.color = null;
-    checkCell(coord, prev);
+    
+    
     if (board.getElementsByClassName("empty").length == 0) {
         checkComplete();
     }
@@ -438,24 +444,24 @@ function noteCell(coord, value) {
     if (cell.classList.contains("locked")) {
         return;
     }
-    let can = cell.getElementsByClassName("can" + value)[0];
+    let can = cell.getElementsByClassName("candidates")[0].getElementsByClassName("candidate")[value-1];
 
     let display = true;
-    if (can.style.display) {
+    if (can.style.opacity == "0") {
         display = false;
     }
 
     if (!notes.has(coord)) {
         notes.set(coord, new Map([
-            ["can" + value, !display]
+            [value, !display]
         ]));
     } else {
-        notes.get(coord).set("can" + value, !display);
+        notes.get(coord).set(value, !display);
     }
     if (display) {
-        can.style.display = "none";
+        can.style.opacity = 0;
     } else {
-        can.style.display = null;
+        can.style.opacity = 1;
     }
 }    
 function selectCell(cell) {
@@ -476,8 +482,45 @@ function selectCell(cell) {
     } else {
         cell.classList.remove("selected");
     }
-    
-}   
+}
+
+function toggleNoting() {
+    noting = !noting;
+    let numButtons = document.getElementsByClassName("sudoku_button");
+    if (noting) {
+        for (let i = 0; i < numButtons.length; i++) {
+            numButtons[i].classList.add("note");
+        }
+    } else {
+        for (let i = 0; i < numButtons.length; i++) {
+            numButtons[i].classList.remove("note");
+        }
+    }
+}
+
+function numberButton(value) {
+    if (noting) {
+        noteSelected(value);
+    } else {
+        changeSelected(value);
+    }
+}
+
+function noteSelected(value) {
+    let selected = document.getElementsByClassName("selected");
+    for (let i = 0; i < selected.length; i++) {
+        noteCell(selected[i].id, value);
+    }
+}
+
+function changeSelected(value) {
+    let selected = document.getElementsByClassName("selected");
+    while (selected.length > 0) {
+        changeCell(selected[0].id, value);
+        selected[0].classList.remove("selected");
+    }
+}
+
 function populateBoardElements(cells) {
     let rows = board.getElementsByClassName("row");
     for (let r = 0; r < 9; r++) {
@@ -489,21 +532,25 @@ function populateBoardElements(cells) {
                 cell.classList.add("empty");
                 cell.classList.remove("locked");
                 value.innerText = 0;
+                cell.getElementsByClassName("candidates")[0].style.display = null;
             } else {
                 cell.classList.remove("empty");
                 cell.classList.add("locked");
                 value.innerText = cells[r][c].value;
+                cell.getElementsByClassName("candidates")[0].style.display = "none";
             }
         }
     }
     updateCandidates();
 }
+// updating candidate visuals based on filled in values
 function updateCandidates() {
     // turn all candidates on
-    for (let i = 0; i < 9; i++) {
-        let cans = board.getElementsByClassName("can" + (i+1));
+    let canBoxes = document.getElementsByClassName("candidates");
+    for (let i = 0; i < canBoxes.length; i++) {
+        let cans = canBoxes[i].getElementsByClassName("candidate");
         for (let j = 0; j < cans.length; j++) {
-            cans[j].style.display = null;
+            cans[j].style.opacity = 1;
         }
     }
 
@@ -519,11 +566,11 @@ function updateCandidates() {
                 used.add(value);
             }
         }
-        for (let i = 0; i < 9; i++) {
-            if (used.has(`${i+1}`)) {
-                let cans = row.getElementsByClassName("can" + (i+1));
-                for (let j = 0; j < 9; j++) {
-                    cans[j].style.display = "none";
+        for (let c = 0; c < 9; c++) {
+            for (let i = 0; i < 9; i++) {
+                if (used.has(`${i+1}`)) {
+                    let can = cols[c].getElementsByClassName("candidate")[i];
+                    can.style.opacity = 0;
                 }
             }
         }
@@ -538,11 +585,12 @@ function updateCandidates() {
                 used.add(value);
             }
         }
-        for (let i = 0; i < 9; i++) {
-            if (used.has(`${i+1}`)) {
-                for (let r = 0; r < 9; r++) {
-                    let can = rows[r].getElementsByClassName("can" + (i+1))[c];
-                    can.style.display = "none";
+        for (let r = 0; r < 9; r++) {
+            let cell = rows[r].getElementsByClassName("col")[c];
+            for (let i = 0; i < 9; i++) {
+                if (used.has(`${i+1}`)) {
+                    let can = cell.getElementsByClassName("candidate")[i];
+                    can.style.opacity = 0;
                 }
             }
         }
@@ -552,6 +600,7 @@ function updateCandidates() {
     for (let br = 0; br < 3; br++) {
         for (let bc = 0; bc < 3; bc++) {
             let used = new Set();
+            // check for all existing values in this 3x3
             for (let r = br * 3; r < br * 3 + 3; r++) {
                 for (let c = bc * 3; c < bc * 3 + 3; c++) {
                     let value = rows[r].getElementsByClassName("value")[c].innerText;
@@ -564,8 +613,8 @@ function updateCandidates() {
                 if (used.has(`${i+1}`)) {
                     for (let r = br * 3; r < br * 3 + 3; r++) {
                         for (let c = bc * 3; c < bc * 3 + 3; c++) {
-                            let can = rows[r].getElementsByClassName("can" + (i+1))[c];
-                            can.style.display = "none";
+                            let can = rows[r].getElementsByClassName("col")[c].getElementsByClassName("candidate")[i];
+                            can.style.opacity = 0;
                         }
                     }
                 }
@@ -573,53 +622,75 @@ function updateCandidates() {
         }
     }
 
-    // notes
-    notes.forEach((cans, coord) => {
-        let cell = document.getElementById(coord);
-        cans.forEach((display, can) => {
-            if (display) {
-                cell.getElementsByClassName(can)[0].style.display = null;
+    // re-apply notes
+    for (const [cell, cans] of notes) {
+        let r = +cell.charAt(1)-1;
+        let c = colLetters.indexOf(cell.charAt(0));
+        let canElements = document.getElementsByClassName("row")[r].getElementsByClassName("col")[c].getElementsByClassName("candidate");
+        for (const [can, value] of cans) {
+            if (value) {
+                canElements[can-1].style.opacity = "100%";
             } else {
-                cell.getElementsByClassName(can)[0].style.display = "none";
+                canElements[can-1].style.opacity = "0%";
             }
             
-        });
-    });
+        }
+    }
 }
+
 async function flipBoard() {
+    if (flipping) {
+        return;
+    }
+    let selected = document.getElementsByClassName("selected");
+    for (let i = 0; i < selected.length; i++) {
+        selected[i].classList.remove("selected");
+    }
+    setDisplayNum(level);
+    showDisplay();
+    board.style.pointerEvents = "none";
+    flipping = true;
     let duration = 0;
     let rows = board.getElementsByClassName("row");
+    let boardRect = board.getBoundingClientRect();
     for (let r = 0; r < 9; r++) {
         let cols = rows[r].getElementsByClassName("col");
         for (let c = 0; c < 9; c++) {
-            let delay = r*.22 + c*.10 + Math.max(Math.floor(Math.random()*1000), 998)%998*4;
-            duration = Math.max(duration, delay + 1);
             let cell = cols[c].getElementsByClassName("cell")[0];
             let flipAudio = cell.querySelector("audio");
             let value = cell.getElementsByClassName("value")[0];
             let wrongDot = cell.getElementsByClassName("wrong_dot")[0];
+            let display = cell.getElementsByClassName("display")[0];
+            let cellRect = cell.getBoundingClientRect();
+            let dy = (cellRect.top + cellRect.height/2) - (boardRect.top + boardRect.height/2);
+            let dx = (cellRect.left + cellRect.width/2) - (boardRect.left + boardRect.width/2);
+            let distance = Math.sqrt(dx * dx + dy * dy) / boardRect.width;
+            let delay = distance*1.5 + (Math.random() * .16 - .08) + Math.max(Math.floor(Math.random()*1000), 998)%998;
+            duration = Math.max(duration, delay + 1);
 
             cell.style.animationDuration = null;
             cell.classList.remove("unflip");
             value.classList.remove("unflip");
             wrongDot.classList.remove("unflip");
+            display.classList.remove("unflip");
             void cell.offsetHeight;
             void value.offsetHeight;
             void wrongDot.offsetHeight;
+            void display.offsetHeight;
             cell.classList.add("flip");
             value.classList.add("flip");
             wrongDot.classList.add("flip");
+            display.classList.add("flip");
             cell.style.animationDelay = delay + "s, " + delay + "s";
             value.style.animationDelay = delay + "s";
             wrongDot.style.animationDelay = delay + "s";
+            display.style.animationDelay = delay + "s";
 
-            let cans = cell.getElementsByClassName("candidate");
-            for (let i = 0; i < cans.length; i++) {
-                cans[i].classList.remove("unflip");
-                void cans[i].offsetHeight;
-                cans[i].classList.add("flip");
-                cans[i].style.animationDelay = delay + "s";
-            }
+            let cans = cell.getElementsByClassName("candidates")[0];
+            cans.classList.remove("unflip");
+            void cans.offsetHeight;
+            cans.classList.add("flip");
+            cans.style.animationDelay = delay + "s";
             setTimeout(() => {
                 if (!muted) {
                     flipAudio.play();
@@ -629,44 +700,58 @@ async function flipBoard() {
     }
     return new Promise((resolve) => {
         setTimeout(() => {
+            flipping = false;
             resolve();
         }, duration * 1000);
     });
 }
 async function unflipBoard() {
+    if (flipping) {
+        return;
+    }
+    flipping = true;
     let duration = 0;
     let rows = board.getElementsByClassName("row");
+    let boardRect = board.getBoundingClientRect();
     for (let r = 0; r < 9; r++) {
         let cols = rows[r].getElementsByClassName("col");
         for (let c = 0; c < 9; c++) {
-            let delay = r*.22 + c*.10 + Math.max(Math.floor(Math.random()*1000), 998)%998*4;
-            duration = Math.max(duration, delay + 1);
             let cell = cols[c].getElementsByClassName("cell")[0];
             let flipAudio = cell.querySelector("audio");
             let value = cell.getElementsByClassName("value")[0];
             let wrongDot = cell.getElementsByClassName("wrong_dot")[0];
+            let display = cell.getElementsByClassName("display")[0];
+            let cellRect = cell.getBoundingClientRect();
+            let dy = (cellRect.top + cellRect.height/2) - (boardRect.top + boardRect.height/2);
+            let dx = (cellRect.left + cellRect.width/2) - (boardRect.left + boardRect.width/2);
+            let distance = Math.sqrt(dx * dx + dy * dy) / boardRect.width;;
+            let delay = distance*1.5 + (Math.random() * .16 - .08) + Math.max(Math.floor(Math.random()*1000), 998)%998;
+            duration = Math.max(duration, delay + 1);
 
             cell.style.animationDuration = null;
             cell.classList.remove("flip");
             value.classList.remove("flip");
             wrongDot.classList.remove("flip");
+            display.classList.remove("flip");
             void cell.offsetHeight;
             void value.offsetHeight;
             void wrongDot.offsetHeight;
+            void display.offsetHeight;
             cell.classList.add("unflip");
             value.classList.add("unflip");
             wrongDot.classList.add("unflip");
+            display.classList.add("unflip");
             cell.style.animationDelay = delay + "s, " + delay + "s";
             value.style.animationDelay = delay + "s";
             wrongDot.style.animationDelay = delay + "s";
+            display.style.animationDelay = delay + "s";
 
-            let cans = cell.getElementsByClassName("candidate");
-            for (let i = 0; i < cans.length; i++) {
-                cans[i].classList.remove("flip");
-                void cans[i].offsetHeight;
-                cans[i].classList.add("unflip");
-                cans[i].style.animationDelay = delay + "s";
-            }
+            let cans = cell.getElementsByClassName("candidates")[0];
+            cans.style.opacity = null;
+            cans.classList.remove("flip");
+            void cans.offsetHeight;
+            cans.classList.add("unflip");
+            cans.style.animationDelay = delay + "s";
             setTimeout(() => {
                 if (!muted) {
                     flipAudio.play();
@@ -674,36 +759,42 @@ async function unflipBoard() {
             }, delay*1000+200);
         }
     }
-    setTimeout(() => {
-        return;
-    }, duration * 1000);
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            hideDisplay();
+            flipping = false;
+            board.style.pointerEvents = "auto";
+            resolve();
+        }, duration * 1000);
+    });
 }
 async function flipCell(coord) {
     let cell = document.getElementById(coord);
     let flipAudio = cell.querySelector("audio");
     let value = cell.getElementsByClassName("value")[0];
     let wrongDot = cell.getElementsByClassName("wrong_dot")[0];
+    let display = cell.getElementsByClassName("display")[0];
 
     cell.classList.remove("unflip");
     value.classList.remove("unflip");
     wrongDot.classList.remove("unflip");
+    display.classList.remove("unflip");
     void cell.offsetHeight;
     void value.offsetHeight;
     void wrongDot.offsetHeight;
     cell.classList.add("flip");
     value.classList.add("flip");
     wrongDot.classList.add("flip");
+    display.classList.add("flip");
     cell.style.animationDelay = "0s";
     value.style.animationDelay = "0s";
     wrongDot.style.animationDelay = "0s";
 
-    let cans = cell.getElementsByClassName("candidate");
-    for (let i = 0; i < cans.length; i++) {
-        cans[i].classList.remove("unflip");
-        void cans[i].offsetHeight;
-        cans[i].classList.add("flip");
-        cans[i].style.animationDelay = "0s";
-    }
+    let cans = cell.getElementsByClassName("candidates")[0];
+    cans.classList.remove("unflip");
+    void cans.offsetHeight;
+    cans.classList.add("flip");
+    cans.style.animationDelay = "0s";
 
     setTimeout(() => {
         if (!muted) {
@@ -722,27 +813,28 @@ async function unflipCell(coord) {
     let flipAudio = cell.querySelector("audio");
     let value = cell.getElementsByClassName("value")[0];
     let wrongDot = cell.getElementsByClassName("wrong_dot")[0];
+    let display = cell.getElementsByClassName("display")[0];
 
     cell.classList.remove("flip");
     value.classList.remove("flip");
     wrongDot.classList.remove("flip");
+    display.classList.remove("flip");
     void cell.offsetHeight;
     void value.offsetHeight;
     void wrongDot.offsetHeight;
     cell.classList.add("unflip");
     value.classList.add("unflip");
     wrongDot.classList.add("unflip");
+    display.classList.add("unflip");
     cell.style.animationDelay = "0s";
     value.style.animationDelay = "0s";
     wrongDot.style.animationDelay = "0s";
 
-    let cans = cell.getElementsByClassName("candidate");
-    for (let i = 0; i < cans.length; i++) {
-        cans[i].classList.remove("flip");
-        void cans[i].offsetHeight;
-        cans[i].classList.add("unflip");
-        cans[i].style.animationDelay = "0s";
-    }
+    let cans = cell.getElementsByClassName("candidates")[0];
+    cans.classList.remove("flip");
+    void cans.offsetHeight;
+    cans.classList.add("unflip");
+    cans.style.animationDelay = "0s";
 
     setTimeout(() => {
         if (!muted) {
@@ -757,9 +849,45 @@ async function unflipCell(coord) {
     });
 }
 async function checkComplete() {
+    if (flipping) {
+        return;
+    }
     if (board.getElementsByClassName("wrong").length == 0) {
+        level++;
+        localStorage.setItem("endlessSudokuLevel", level);
         difficulty += difficultyIncrease;
         await flipBoard();
         createBoard();
+    }
+}
+
+function hideDisplay() {
+    let displays = document.getElementsByClassName("display");
+    for (let i = 0; i < displays.length; i++) {
+        displays[i].style.display = "none";
+    }
+}
+
+function showDisplay() {
+    let displays = document.getElementsByClassName("display");
+    for (let i = 0; i < displays.length; i++) {
+        displays[i].style.display = null;
+    }
+}
+
+function setDisplayNum(num) {
+    let displayNums = document.getElementsByClassName("num");
+    for (let i = 0; i < displayNums.length; i++) {
+        displayNums[i].innerText = num;
+    }
+}
+
+function adjustDisplayOffsets() {
+    boardRect = board.getBoundingClientRect();
+    let displays = document.getElementsByClassName("display");
+    for (let i = 0; i < displays.length; i++) {
+        let cellRect = displays[i].parentElement.parentElement.getBoundingClientRect();
+        displays[i].style.left = boardRect.left - cellRect.left + (i % 4 - 2)*600/boardRect.width + "px";
+        displays[i].style.top = -1 * (boardRect.bottom - cellRect.bottom) + (i % 4 - 2)*600/boardRect.width + "px";
     }
 }

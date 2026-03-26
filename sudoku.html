@@ -30,77 +30,136 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            height: fit-content;
-            width: fit-content;
             background-color: #181818;
             perspective: 2000px;
-            margin-top: 40px;
-            margin-left: 50%;
-            transform: translateX(-50%);
             user-select: none;
-            border-radius: 10px;
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        .display {
+            position: absolute;
+            z-index: 2;
+            transform: scaleY(-1);
+        }
+        .display .num {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f2f2f2;
+            font-weight: 800;
+        }
+        #ui {
+            width: 100%;
+            height: 128px;
+            display: flex;
+            flex-direction: row;
+            margin: left;
+        }
+        #ui_numbers {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            height: 100%;
+        }
+        .sudoku_button_mount {
+            position: relative;
+        }
+        .sudoku_button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            box-sizing: border-box;
+            height: 100%;
+            width: 100%;
+            transform: translate(-50%, -50%);
+            background-color: #f2f2f2;
+            border-radius: 5px;
+            border: 1px solid #20252D55;
+            filter: drop-shadow(0px 3px 3px #20252d55);
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+        }
+        .sudoku_button:hover {
+            height: calc(100% + 2px);
+            width: calc(100% + 2px);
+        }
+        .sudoku_button:active {
+            height: 100%;
+            width: 100%;
+        }
+        .sudoku_button span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-weight: 800;
+            transform: translate(-50%, -50%);
+        }
+        .sudoku_button.note span {
+            font-weight: 600;
+            transform: translate(-50%, -80%);
+        }
+        .sudoku_button svg {
+            position: absolute;
+            height: 40%;
+            width: 40%;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         .row {
             display: flex;
             flex-direction: row;
             transform-style: preserve-3d;
+            height: round(down, (100% - 22px) / 9, 1px);
+            margin-top: 1px;
+        }
+        .row:nth-child(3n + 1) {
+            margin-top: 3px;
+        }
+        .row:nth-child(1) {
+            margin-top: 5px;
         }
         .col {
-            box-sizing: border-box;
-            height: 86px;
-            width: 86px;
-            
             transform-style: preserve-3d;
-            border: 1px solid #141414;
+            height: 100%;
+            width: round(down, (100% - 22px) / 9, 1px);
+            margin-left: 1px;
         }
-        .col.topEdge {
-            border-top-width: 5px;
+        .col:nth-child(3n + 1) {
+            margin-left: 3px;
         }
-        .col.bottomEdge {
-            border-bottom-width: 5px;
-        }
-        .col.leftEdge {
-            border-left-width: 5px;
-        }
-        .col.rightEdge {
-            border-right-width: 5px;
-        }
-        .col.innerVert {
-            border-left-width: 3px;
-        }
-        .col.innerHori {
-            border-top-width: 3px;
-        }
-        .col+.col {
-            margin-left: -1px;
-        }
-        .row+.row {
-            margin-top: -1px;
+        .col:nth-child(1) {
+            margin-left: 5px;
         }
         .cell {
+            transform-style: preserve-3d;
             box-sizing: border-box;
             height: 100%;
             width: 100%;
-            transform-style: preserve-3d;
             background-color: #f2f2f2;
+            cursor: pointer;
+            overflow: hidden;
         }
         .cell.flip {
-            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipAwayColor 1s linear forwards;
+            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards, flipAwayColor 1s linear forwards;
         }
         .cell.unflip {
-            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipBackColor 1s linear forwards;
+            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards, flipBackColor 1s linear forwards;
             transform: rotateX(180deg);
             background-color: #282828;
         }
         .cell .value {
-            padding-top: 12px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
             text-align: center;
             color: #141414;
-            font-size: 46px;
             font-weight: 700;
             transition: color .5s;
             transform-style: preserve-3d;
-            transform: translateZ(1px);
+            transform: translate(-50%, -50%) translateZ(1px);
         }
         .cell .value.flip {
             animation: flipAwayContent 1s linear forwards;
@@ -109,21 +168,43 @@
             animation: flipBackContent 1s linear forwards;
             opacity: 0%;
         }
-        .cell .candidate {
+        .cell .candidates {
+            transform-style: preserve-3d;
+            display: flex;
             position: absolute;
+            flex-wrap: wrap;
+            flex-direction: row;
+            top: 50%;
+            left: 50%;
+            height: calc(100% - 10px);
+            width: calc(100% - 10px);
+            transform: translate(-50%, -50%) translateZ(1px);
+            mix-blend-mode: multiply;
+        }
+        .candidates .candidate {
+            height: calc((100%) / 3);
+            width: calc((100%) / 3);
             color: #6b6b6b;
-            font-size: 14px;
-            display: none;
+            text-align: center;
 
             transform-style: preserve-3d;
             transform: translateZ(1px);
+
+            box-sizing: border-box;
         }
-        .cell .candidate.flip {
+        .cell .candidates.flip {
             animation: flipAwayContent 1s linear forwards;
         }
-        .cell .candidate.unflip {
+        .cell .candidates.unflip {
             animation: flipBackContent 1s linear forwards;
             opacity: 0%;
+        }
+        .cell .display.flip {
+            animation: flipAwayDisplay 1s linear forwards;
+            opacity: 0%;
+        }
+        .cell .display.unflip {
+            animation: flipBackDisplay 1s linear forwards;
         }
         .cell.locked {
             background-color: #d3d3d3;
@@ -132,10 +213,10 @@
             background-color: #85b8c3 !important;
         }
         .cell.locked.flip {
-            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipAwayColorLocked 1s linear forwards;
+            animation: flipAway 1s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards, flipAwayColorLocked 1s linear forwards;
         }
         .cell.locked.unflip {
-            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, flipBackColorLocked 1s linear forwards;
+            animation: flipBack 1s cubic-bezier(0.175, 0.885, 0.32, 1.4) forwards, flipBackColorLocked 1s linear forwards;
             transform: rotateX(180deg);
             background-color: #282828;
         }
@@ -172,42 +253,6 @@
         .cell.selected {
             background-color: #aef0ff !important;
         }
-        .can1 {
-            top: 10px;
-            left: 12px;
-        }
-        .can2 {
-            top: 10px;
-            left: 37px;
-        }
-        .can3 {
-            top: 10px;
-            left: 62px;
-        }
-        .can4 {
-            top: 34px;
-            left: 12px;
-        }
-        .can5 {
-            top: 34px;
-            left: 37px;
-        }
-        .can6 {
-            top: 34px;
-            left: 62px;
-        }
-        .can7 {
-            top: 58px;
-            left: 12px;
-        }
-        .can8 {
-            top: 58px;
-            left: 37px;
-        }
-        .can9 {
-            top: 58px;
-            left: 62px;
-        }
         @keyframes flipAway {
             0% {
                 transform: rotateX(0deg);
@@ -219,7 +264,7 @@
             0% {
                 transform: rotateX(180deg);
             } 100% {
-                transform: rotateX(360deg);
+                transform: rotateX(0deg);
             }
         }
         @keyframes flipAwayContent {
@@ -242,6 +287,28 @@
                 opacity: 100%;
             } 100% {
                 opacity: 100%;
+            }
+        }
+        @keyframes flipAwayDisplay {
+            0% {
+                opacity: 0%;
+            } 10% {
+                opacity: 0%;
+            } 10.1% {
+                opacity: 100%;
+            } 100% {
+                opacity: 100%;
+            }
+        }
+        @keyframes flipBackDisplay {
+            0% {
+                opacity: 100%;
+            } 10% {
+                opacity: 100%;
+            } 10.1% {
+                opacity: 0%;
+            } 100% {
+                opacity: 0%;
             }
         }
         @keyframes flipAwayColor {
@@ -314,71 +381,112 @@
         }
         @media (max-width: 989px) { /*mobile*/
             #board {
-                transform: translate(-50%, calc((100vw) / 850px * 50% - 50%)) scale(calc((100vw) / 850px));
+                margin-top: calc((100vw - 12px) / 318px * 10px);
+                margin-left: -35px;
+                height: calc(round(down, 100vw - 10px, 9px) - 4px);
+                width: calc(round(down, 100vw - 10px, 9px) - 4px);
+            }
+            .display {
+                height: calc(round(down, 100vw - 10px, 9px) - 4px);
+                width: calc(round(down, 100vw - 10px, 9px) - 4px);
+            }
+            .display .num {
+                font-size: calc((100vw - 12px) / 318px * 200px);
+            }
+            #ui {
+                margin-top: calc((100vw - 12px) / 318px * 10px);
+                margin-left: -35px;
+                height: calc((100vw - 12px) / 318px * 70px);
+                width: calc(100vw - 10px);
+            }
+            #pencil {
+                height: calc((100vw - 12px) / 318px * 69px);
+                width: calc((100vw - 12px) / 318px * 69px);
+                margin-left: calc((100vw - 12px) / 318px * 3px);
+            }
+            #ui_numbers {
+                width: calc((100vw - 12px) / 318px * 226px);
+                margin-left: calc((100vw - 12px) / 318px * 18px);
+            }
+            #ui_numbers .sudoku_button_mount {
+                margin-bottom: calc((100vw - 12px) / 318px * 3px);
+                margin-right: calc((100vw - 12px) / 318px * 3px);
+                height: calc((100vw - 12px) / 318px * 33px);
+                width: calc((100vw - 12px) / 318px * 42px);
+            }
+            .sudoku_button span {
+                font-size: calc((100vw - 12px) / 318px * 18px);
+            }
+            .sudoku_button.note span {
+                font-size: calc((100vw - 12px) / 318px * 12px);
+            }
+            .cell .value {
+                font-size: calc((100vw - 12px) / 318px * 20px);
+            }
+            .candidates .candidate {
+                font-size: calc((100vw - 12px) / 318px * 7px);
+                padding-top: calc((100vw - 12px) / 318px * 1px);
             }
         }
         @media (min-width: 990px) { /*desktop narrow*/
             #board {
                 margin-top: 40px;
-                transform: translateX(-50%);
+                margin-left: 132px;
+                height: 644px;
+                width: 644px;
+            }
+            .display {
+                height: 644px;
+                width: 644px;
+            }
+            .display .num {
+                font-size: 400px;
+            }
+            #ui {
+                margin-top: 40px;
+                margin-left: 132px;
+                width: 644px;
+            }
+            #pencil {
+                height: 127px;
+                width: 127px;
+                margin-left: 12px;
+            }
+            #ui_numbers {
+                width: 446px;
+                margin-left: 56px;
+            }
+            #ui_numbers .sudoku_button_mount {
+                margin-bottom: 8px;
+                margin-right: 8px;
+                height: calc((100% - 8px) / 2);
+                width: calc((100% - 40px) / 5);
+            }
+            .sudoku_button span {
+                font-size: 32px;
+            }
+            .sudoku_button.note span {
+                font-size: 22px;
+            }
+            .cell .value {
+                font-size: 38px;
+            }
+            .candidates .candidate {
+                font-size: 13px;
+                padding-top: 2px;
             }
         }
         @media (min-width: 1380px) { /*full desktop*/
             #board {
-                
+                margin-left: 328px;
+            }
+            #ui {
+                margin-left: 328px;
             }
         }
     </style>
 </head>
 <body>
-    <div id="image_expand_bg"></div>
-    <div id="image_expand" class="stasis">
-        <div id="image_expand_blob1" class="blobs invert stasis">
-            <svg id="blob1_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="1920" height="720" fill="url(#paint0_radial_11606_2)"/>
-                <defs>
-                <radialGradient id="paint0_radial_11606_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960) rotate(90) scale(360 960)">
-                <stop stop-color="#20252D" stop-opacity="0"/>
-                <stop offset="1" stop-color="#20252D"/>
-                </radialGradient>
-                </defs>
-            </svg>
-        </div>
-        <div id="image_expand_blob2" class="blobs invert stasis">
-            <svg id="blob2_svg" viewBox="0 0 1920 720" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="1920" height="720" fill="url(#paint0_radial_11613_2)"/>
-                <defs>
-                <radialGradient id="paint0_radial_11613_2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(960 720) rotate(-90) scale(360 960)">
-                <stop stop-color="#20252D" stop-opacity="0"/>
-                <stop offset="1" stop-color="#20252D"/>
-                </radialGradient>
-                </defs>
-            </svg>
-        </div>
-        <div id="image_expand_bar" class="stasis">
-            <div id="zoom">
-                <div class="label">zoom</div>
-                <svg id="zoom_minus" width="16" height="2" viewBox="0 0 16 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="16" height="1.5" rx="0.75" fill="#20252D"/>
-                </svg>
-                <div id="zoom_track">
-                    <div id="zoom_thumb"></div>
-                </div>
-                <svg id="zoom_plus" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect y="7.25" width="16" height="1.5" rx="0.75" fill="#20252D"/>
-                    <rect x="8.75" width="16" height="1.5" rx="0.75" transform="rotate(90 8.75 0)" fill="#20252D"/>
-                </svg>
-            </div>
-            <div class="button_mount">
-                <div class="button circle" onclick="closeImage()">
-                    <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.699219 15.1992L6.19922 9.69922M6.19922 9.69922L6.19922 14.6992M6.19922 9.69922L1.19922 9.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
-                        <path d="M15.6992 0.699219L10.1992 6.19922M10.1992 6.19922V1.19922M10.1992 6.19922L15.1992 6.19922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="scrollbar">
         <div id="scrollbar_track">
             <div id="scrollbar_thumb"></div>
@@ -493,18 +601,79 @@
     </div>
     <div id="content">
         <div id="board"></div>
+        <div id="ui">
+            <div id="pencil" class="sudoku_button_mount" onclick="toggleNoting()">
+                <div class="sudoku_button">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M26.8711 10.3125L36.7706 20.212L9.90053 47.0821H0.00103652V37.1826L26.8711 10.3125Z" fill="#20252D"/>
+                        <rect x="31.1133" y="6.07031" width="14" height="4" transform="rotate(45 31.1133 6.07031)" fill="#20252D"/>
+                        <path d="M36.0623 1.12132C37.2338 -0.0502525 39.1333 -0.0502525 40.3049 1.12132L45.9618 6.77817C47.1333 7.94975 47.1333 9.84924 45.9618 11.0208L42.4262 14.5563L32.5267 4.65685L36.0623 1.12132Z" fill="#20252D"/>
+                    </svg>
+                </div>
+            </div>
+            <div id="ui_numbers">
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(1)">
+                        <span>1</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(2)">
+                        <span>2</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(3)">
+                        <span>3</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(4)">
+                        <span>4</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(5)">
+                        <span>5</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(6)">
+                        <span>6</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(7)">
+                        <span>7</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(8)">
+                        <span>8</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(9)">
+                        <span>9</span>
+                    </div>
+                </div>
+                <div class="sudoku_button_mount">
+                    <div class="sudoku_button" onclick="numberButton(0)">
+                        <svg width="33" height="19" viewBox="0 0 33 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M33 3C33 1.34315 31.6569 0 30 0H8.37403L0 9.57056L8.37403 19H30C31.6569 19 33 17.6569 33 16V3ZM23.0498 5.32837L24.443 6.74268L21.6573 9.57056L24.443 12.3995L23.0498 13.8137L20.264 10.985L17.4777 13.8137L16.0846 12.3995L18.8711 9.57056L16.0846 6.74268L17.4777 5.32837L20.264 8.15649L23.0498 5.32837Z" fill="#20252D"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="project_section">
             <div id="description" class="text_block">
-                <span>This is a Sisyphean sudoku game! After each level, the board </span>
-                <span>will reset and it will give you an even harder one. There is no </span>
-                <span>end. It will keep making puzzles. If you enjoy filling in sudoku </span>
-                <span>puzzles when you're bored, this is the place to be! It's not </span>
-                <span>currently playable on mobile.</span>
-                <br><br>
-                <span>To fill cells, select a cell with left-click, then use the 1-9 keys </span>
-                <span>to enter a number. To make a note within a cell, hold Shift </span>
-                <span>before hitting 1-9 to toggle the candidate. To select multiple </span>
-                <span>cells at once, hold Shift while left-clicking.</span>
+                <span>This is endless sudoku! After each completed puzzle, your </span>
+                <span>completion count goes up, and you'll be given a harder </span>
+                <span>puzzle. Refreshing the page will give you a new puzzle at the </span>
+                <span>same difficulty. Your completion count is saved, but your </span>
+                <span>puzzle progress is not. There is no limit. There will always be </span>
+                <span>another puzzle. Stay as long as you like. Enjoy.</span>
             </div>
         </div>
     </div>

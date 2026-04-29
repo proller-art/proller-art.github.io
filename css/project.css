@@ -141,6 +141,7 @@
     }
     #project_title {
         margin-left: 0px;
+        width: 100%;
     }
     #project_info {
         flex-direction: column;

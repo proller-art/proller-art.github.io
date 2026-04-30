@@ -36,14 +36,14 @@
         #items .mount {
             margin-bottom: 120px;
         }
-        #blob1, #blob2, #blob3, #blob4, #blob5, #blob6, #blob7, #blob8, #blob9  {
+        #blob1, #blob2, #blob3, #blob4, #blob5, #blob6, #blob7, #blob8  {
             position: absolute;
         }
         @media (max-width: 989px) { /*mobile*/
             #items {
                 padding: 0;
             }
-            #blob1, #blob2, #blob3, #blob4, #blob5, #blob6, #blob7, #blob8, #blob9  {
+            #blob1, #blob2, #blob3, #blob4, #blob5, #blob6, #blob7, #blob8  {
                 display: none;
             }
         }
@@ -97,11 +97,6 @@
             #blob8 {
                 top: 3080px;
                 left: 0px;
-            }
-            #blob9 {
-                top: 3640px;
-                right: 0px;
-                left: auto;
             }
         }
         @media (min-width: 1380px) { /*full desktop*/
@@ -161,12 +156,6 @@
                 left: 0px;
                 height: 240px;
                 width: 455px;
-            }
-            #blob9 {
-                top: 2280px;
-                left: 455px;
-                height: 240px;
-                width: 390px;
             }
         }
     </style>
@@ -293,7 +282,6 @@
         <div id="blob6" class="blobs"></div>
         <div id="blob7" class="blobs"></div>
         <div id="blob8" class="blobs"></div>
-        <div id="blob9" class="blobs"></div>
         <div id="items" class="item_row">
             <div class="mount">
                 <a href="3d_proller.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, '3d_proller.html', event)">
@@ -306,7 +294,7 @@
                     <div class="title">
                         3D Proller
                     </div>
-                    3D Model
+                    3D Vtuber Model
                 </div>
             </div>
             <div class="mount">
@@ -324,6 +312,20 @@
                 </div>
             </div>
             <div class="mount">
+                <a href="geega_talkshow_background.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'geega_talkshow_background.html', event)">
+                    <video>
+                        <source src="media/works/geega/preview.webm" type="video/webm" muted loop>
+                    </video>
+                    <img src="media/works/geega/thumbnail.png">
+                </a>
+                <div class="item_text">
+                    <div class="title">
+                        GEEGA Talkshow Background
+                    </div>
+                    Illustration
+                </div>
+            </div>
+            <div class="mount">
                 <a href="gigi_murin_isekai.html"  class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'gigi_murin_isekai.html', event)">
                     <video>
                         <source src="media/works/gigi isekai/preview.webm" type="video/webm" muted loop>
@@ -335,31 +337,6 @@
                         Gigi Murin Double Isekai
                     </div>
                     Animation
-                </div>
-            </div>
-            <div class="mount">
-                <a href="sheepy_radio.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'sheepy_radio.html', event)">
-                    <video>
-                        <source src="media/works/sheepy radio/preview.webm" type="video/webm" muted loop>
-                    </video>
-                    <img src="media/works/sheepy radio/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Sheepy Radio
-                    </div>
-                    Widget
-                </div>
-            </div>
-            <div class="mount">
-                    <a href="iced_background.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'iced_background.html', event)">
-                        <img src="media/works/iced/thumbnail.png">
-                    </a>
-                <div class="item_text">
-                    <div class="title">
-                        ICED Background
-                    </div>
-                    Illustration
                 </div>
             </div>
             <div class="mount">
@@ -377,17 +354,14 @@
                 </div>
             </div>
             <div class="mount">
-                <a href="geega_talkshow_background.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'geega_talkshow_background.html', event)">
-                    <video>
-                        <source src="media/works/geega/preview.webm" type="video/webm" muted loop>
-                    </video>
-                    <img src="media/works/geega/thumbnail.png">
+                <a href="mensch.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'mensch.html', event)">
+                    <img src="media/works/mensch/thumbnail.png">
                 </a>
                 <div class="item_text">
                     <div class="title">
-                        GEEGA Talkshow Background
+                        Mensch
                     </div>
-                    Illustration
+                    Book
                 </div>
             </div>
             <div class="mount">
@@ -424,12 +398,26 @@
                 </div>
             </div>
             <div class="mount">
-                <a href="kururin_graduation.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'kururin_graduation.html', event)">
-                    <img src="media/works/kururin/thumbnail.png">
+                <a href="sheepy_radio.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'sheepy_radio.html', event)">
+                    <video>
+                        <source src="media/works/sheepy radio/preview.webm" type="video/webm" muted loop>
+                    </video>
+                    <img src="media/works/sheepy radio/thumbnail.png">
                 </a>
                 <div class="item_text">
                     <div class="title">
-                        Kururin Graduation
+                        Sheepy Radio
+                    </div>
+                    Widget
+                </div>
+            </div>
+            <div class="mount">
+                <a href="kureiji_ollie.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'kureiji_ollie.html', event)">
+                    <img src="media/works/kureiji ollie/thumbnail.png">
+                </a>
+                <div class="item_text">
+                    <div class="title">
+                        Kureiji Ollie
                     </div>
                     Illustration
                 </div>
@@ -441,28 +429,6 @@
                 <div class="item_text">
                     <div class="title">
                         Ovi the Dream Eater
-                    </div>
-                    Illustration
-                </div>
-            </div>
-            <div class="mount">
-                <a href="myrral_background.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'myrral_background.html', event)">
-                    <img src="media/works/myrral/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Myrral Background
-                    </div>
-                    Illustration
-                </div>
-            </div>
-            <div class="mount">
-                <a href="laguo_jadeheart.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'laguo_jadeheart.html', event)">
-                    <img src="media/works/laguo/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Laguo Jadeheart
                     </div>
                     Illustration
                 </div>
@@ -489,50 +455,8 @@
                     Illustration
                 </div>
             </div>
-            <div class="mount">
-                <a href="elira_pendora.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'elira_pendora.html', event)">
-                    <img src="media/works/elira pendora/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Elira Pendora
-                    </div>
-                    Illustration
-                </div>
-            </div>
-            <div class="mount">
-                <a href="kureiji_ollie.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'kureiji_ollie.html', event)">
-                    <img src="media/works/kureiji ollie/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Kureiji Ollie
-                    </div>
-                    Illustration
-                </div>
-            </div>
-            <div class="mount">
-                <a href="coven_sona.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'coven_sona.html', event)">
-                    <img src="media/works/coven sona/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Coven Sona
-                    </div>
-                    Illustration
-                </div>
-            </div>
-            <div class="mount">
-                <a href="mensch.html" class="item" onmouseover="hoverItemVideo(this)" onclick="fillTransition(false, 'mensch.html', event)">
-                    <img src="media/works/mensch/thumbnail.png">
-                </a>
-                <div class="item_text">
-                    <div class="title">
-                        Mensch
-                    </div>
-                    Book
-                </div>
-            </div>
+            
+            
         </div>
     </div>
     <script>

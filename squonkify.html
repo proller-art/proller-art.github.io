@@ -212,15 +212,9 @@
             <div id="blob1" class="blobs"></div>
             <div id="blob2" class="blobs"></div>
             <div id="hero" class="project_media frame">
-                <img src="media/works/squonkify/full.png">
-                <div class="button_mount">
-                    <div class="button circle" onclick="expandImage(this)">
-                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6.19922 9.69922L0.699219 15.1992M0.699219 15.1992V10.1992M0.699219 15.1992H5.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
-                            <path d="M10.1992 6.19922L15.6992 0.699219M15.6992 0.699219L15.6992 5.69922M15.6992 0.699219L10.6992 0.699218" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                </div>
+                <video autoplay muted loop>
+                    <source src="media/works/squonkify/hero.webm" type="video/webm">
+                </video>
             </div>
         </div>
         <div id="project_summary">
@@ -237,21 +231,71 @@
                         <div class="detail_label">Software</div>
                         <div class="detail_items">
                             <div>Figma</div>
-                            <div>Spotify</div>
-                            <div>Twitch</div>
+                            <div>Spotify API</div>
+                            <div>Twitch API</div>
                             <div>Javascript</div>
                         </div>
                     </div>
                 </div>
                 <div id="project_body_text" class="text_block">
-                    <span></span>
+                    <span>I needed a widget for displaying my currently playing song </span>
+                    <span>from Spotify on my livestream, and ended up with a highly </span>
+                    <span>functional queuing system and playlist creator! After learning </span>
+                    <span>how to work with the Spotify API, I started adding more </span>
+                    <span>features for my viewers.  They can request songs through a </span>
+                    <span>Twitch redeem by either entering a song link or by entering </span>
+                    <span>words for Spotify to perform a search query with. I had to </span>
+                    <span>make sure to parse links properly and deny songs that are </span>
+                    <span>over a certain length, all while providing responses in chat </span>
+                    <span>through my Squonkler bot so viewers can understand what's </span>
+                    <span>going on with the queue.</span>
+                </div>
+            </div>
+        </div>
+        <div class="project_section">
+            <div class="project_media frame">
+                <img src="media/works/squonkify/full.png">
+                <div class="button_mount">
+                    <div class="button circle" onclick="expandImage(this)">
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.19922 9.69922L0.699219 15.1992M0.699219 15.1992V10.1992M0.699219 15.1992H5.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M10.1992 6.19922L15.6992 0.699219M15.6992 0.699219L15.6992 5.69922M15.6992 0.699219L10.6992 0.699218" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="project_body_text2" class="text_block">
+                <span>For every stream that I have song requests on, I also have </span>
+                <span>the widget passively add every song that plays to a playlist </span>
+                <span>for the day. It's a nice way to log what we listened to during a </span>
+                <span>specific stream, and VOD watchers then have the chance to </span>
+                <span>stream the same music that we listened to live. VODs on </span>
+                <span>Twitch cannot have DMCA music in them so most streams </span>
+                <span>leave their music out of the stored recording. Each viewer </span>
+                <span>that requests songs during the stream also gets their very </span>
+                <span>own playlist so I can see everyone's music tastes and they </span>
+                <span>can get a history of what they've queued.</span>
+                <br><br>
+                <span>For being such a small visual on the stream, this widget </span>
+                <span>ended up being a powerhouse of functionality!</span>
+            </div>
+            <div class="project_media frame">
+                <img src="media/works/squonkify/figma.png">
+                <div class="button_mount">
+                    <div class="button circle" onclick="expandImage(this)">
+                        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.19922 9.69922L0.699219 15.1992M0.699219 15.1992V10.1992M0.699219 15.1992H5.69922" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                            <path d="M10.1992 6.19922L15.6992 0.699219M15.6992 0.699219L15.6992 5.69922M15.6992 0.699219L10.6992 0.699218" stroke="#20252D" stroke-width="1.4" stroke-linecap="round"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
         let scrollables = [
-            {triggerID: "project_body_text", animateIDs: [], used: false}
+            {triggerID: "project_body_text", animateIDs: [], used: false},
+            {triggerID: "project_body_text2", animateIDs: [], used: false}
         ];
     </script>
     <script src="scripts/hwacheck.js"></script>
